@@ -1,0 +1,24 @@
+:root{
+  --bg:#f3edf7;
+  --surface:#fff;
+  --primary:#6750a4;
+  --text:#1d1b20;
+  --radius:12px;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --font:'Roboto',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141218; --surface:#211f26; --text:#e6e0e9; }
+}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}
+header{padding:1rem}
+h1{margin:0;font-size:1.25rem;font-weight:500}
+main{padding:0 1rem 1rem}
+.add-line form{display:flex;gap:.5rem;align-items:center}
+.add-line input{flex:1 1 0;padding:.6rem .75rem;border:1px solid #ccc;border-radius:var(--radius);font-size:.95rem}
+.add-line button{flex:0 0 40px;height:40px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:1.4rem;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th{background:var(--primary);color:#fff;text-align:left;padding:.5rem .75rem}
+td{padding:.5rem .75rem;border-bottom:1px solid #ddd}
+tr:last-child td{border:none}
+.days{font-weight:500;color:var(--primary)}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>SubTrack</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#6750a4">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Мои подписки</h1>
+  </header>
+
+  <main>
+    <section class="card add-line">
+      <form id="addForm">
+        <input name="name" placeholder="Название" required>
+        <input name="price" type="number" step="50" placeholder="Цена" required>
+        <input name="nextPay" type="date" required>
+        <button type="submit">+</button>
+      </form>
+    </section>
+
+    <table class="card">
+      <thead><tr><th>Название<th>Цена<th>Дата<th>Осталось</tr></thead>
+      <tbody id="list"></tbody>
+    </table>
+  </main>
+
+  <script src="app.js"></script>
+  <script>navigator.serviceWorker?.register('sw.js')</script>
+</body>
+</html>
