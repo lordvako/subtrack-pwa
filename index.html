@@ -5,28 +5,27 @@
   <title>SubTrack</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
-  <!-- ключевые теги масштабирования -->
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#6750a4">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>Мои подписки</h1>
-  </header>
+  <header><h1>Мои подписки</h1></header>
 
   <main>
-    <section class="add-line">
+    <section class="form-card">
       <form id="addForm">
-        <input name="name" placeholder="Название" required>
-        <input name="price" type="number" step="50" placeholder="Цена" required>
-        <input name="nextPay" type="date" required>
-        <button type="submit">+</button>
+        <input name="name" placeholder="Название подписки" required>
+        <input name="price" type="number" placeholder="Сумма, ₽" required>
+        <div class="date-line">
+          <input name="nextPay" type="date" required>
+          <button type="submit">+</button>
+        </div>
       </form>
     </section>
 
     <table id="list">
-      <thead><tr><th>Название<th>Цена<th>Дата<th>Дней</tr></thead>
+      <thead><tr><th>Название<th>Сумма<th>След. платёж</tr></thead>
       <tbody></tbody>
     </table>
   </main>
