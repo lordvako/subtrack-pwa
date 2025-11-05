@@ -10,21 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header><h1>Мои подписки</h1>
-     <span style="font-size:.7rem;color:gray">v2.1-удаление+период</span> 
-  </header>
+  <header><h1>Мои подписки</h1></header>
 
   <main>
     <section class="form-card">
       <form id="addForm">
-        <input name="name" placeholder="Название подписки" required>
+        <input name="name" placeholder="Название" required>
         <input name="price" type="number" placeholder="Сумма, ₽" required>
-        <select name="period" required>
-          <option value="1">1 месяц</option>
-          <option value="3">3 месяца</option>
-          <option value="6">6 месяцев</option>
-          <option value="12">1 год</option>
-        </select>
         <div class="date-line">
           <input name="nextPay" type="date" required>
           <button type="submit">+</button>
@@ -33,7 +25,7 @@
     </section>
 
     <table id="list">
-      <thead><tr><th>Название<th>Сумма<th>След. платёж<th></tr></thead>
+      <thead><tr><th>Название<th>Сумма<th>Дата<th></tr></thead>
       <tbody></tbody>
     </table>
   </main>
@@ -42,4 +34,3 @@
   <script>navigator.serviceWorker?.register('sw.js')</script>
 </body>
 </html>
-
