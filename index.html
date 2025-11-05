@@ -5,7 +5,8 @@
   <title>SubTrack</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- ключевые теги масштабирования -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#6750a4">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
@@ -15,7 +16,7 @@
   </header>
 
   <main>
-    <section class="card add-line">
+    <section class="add-line">
       <form id="addForm">
         <input name="name" placeholder="Название" required>
         <input name="price" type="number" step="50" placeholder="Цена" required>
@@ -24,9 +25,9 @@
       </form>
     </section>
 
-    <table class="card">
-      <thead><tr><th>Название<th>Цена<th>Дата<th>Осталось</tr></thead>
-      <tbody id="list"></tbody>
+    <table id="list">
+      <thead><tr><th>Название<th>Цена<th>Дата<th>Дней</tr></thead>
+      <tbody></tbody>
     </table>
   </main>
 
