@@ -17,12 +17,12 @@ function prettyDays(d){
   return `через ${d} дн.`;
 }
 
-// === рендер + просрочка ===
+// === рендер таблицы ===
 function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
-      const next = addMonths(s.nextPay, +s.period);
+      const next = addMonths(s.nextPay, +s.period);   // учитываем период
       const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
       const overdue = daysLeft < 0;
       return `<tr class="${overdue ? 'overdue' : ''}">
@@ -54,7 +54,7 @@ addForm.onsubmit = e =>{
   render();
 };
 
-// === инициализация ===
+// === старт ===
 document.addEventListener('DOMContentLoaded',()=>{
   render();
   addForm.nextPay.value = new Date().toISOString().slice(0,10);
