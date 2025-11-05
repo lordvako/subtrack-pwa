@@ -1,27 +1,48 @@
+// === localStorage helpers ===
 function getSubs(){ return JSON.parse(localStorage.getItem('subs')||'[]'); }
 function setSubs(list){ localStorage.setItem('subs',JSON.stringify(list)); }
 
+// === utility: +1 month ===
 function addMonths(date, n){
   const d = new Date(date);
   d.setMonth(d.getMonth() + n);
   return d.toISOString().slice(0,10);
 }
 
+// === pretty "days left" ===
+function prettyDays(d){
+  if(d<0) return 'просрочено';
+  if(d===0) return 'сегодня';
+  if(d===1) return 'завтра';
+  return `через ${d} дн.`;
+}
+
+// === render table with DELETE icon ===
 function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
-    .map(s=>{
+    .map((s,idx)=>{
       const next = addMonths(s.nextPay,1);
       const days = Math.ceil((new Date(next) - new Date()) / 86400000);
       return `<tr>
                 <td>${s.name}</td>
                 <td>${s.price} ₽</td>
-                <td><div>${next}</div><div class="next">${days>0?'через '+days+' дн.':'сегодня'}</div></td>
+                <td><div>${next}</div><div class="next">${prettyDays(days)}</div></td>
+                <td class="del" onclick="del(${idx})">🗑️</td>
               </tr>`;
     }).join('');
-  list.querySelector('tbody').innerHTML = rows || '<tr><td colspan="3">Подписок пока нет</td></tr>';
+  list.querySelector('tbody').innerHTML = rows || '<tr><td colspan="4">Подписок пока нет</td></tr>';
 }
 
+// === delete by index ===
+function del(idx){
+  const subs = getSubs();
+  subs.splice(idx,1);        // удаляем
+  setSubs(subs);
+  render();                  // перерисовываем
+}
+
+// === add new subscription ===
 addForm.onsubmit = e =>{
   e.preventDefault();
   const {name,price,nextPay} = addForm;
@@ -31,6 +52,8 @@ addForm.onsubmit = e =>{
   addForm.reset();
   render();
 };
+
+// === init ===
 document.addEventListener('DOMContentLoaded',()=>{
   render();
   addForm.nextPay.value = new Date().toISOString().slice(0,10);
