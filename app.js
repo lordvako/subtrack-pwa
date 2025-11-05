@@ -1,20 +1,16 @@
-// читаем / пишем в localStorage
+// читаем / пишем localStorage
 function getSubs(){
   return JSON.parse(localStorage.getItem('subs')||'[]');
 }
 function setSubs(list){
   localStorage.setItem('subs',JSON.stringify(list));
 }
-
-// красивое «осталось»
 function prettyDays(d){
   if(d<0) return 'просрочено';
   if(d===0) return 'сегодня';
   if(d===1) return 'завтра';
-  return `через ${d} дн.`;
+  return `${d}`;
 }
-
-// рендер таблицы
 function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
@@ -27,10 +23,8 @@ function render(){
                 <td class="days">${prettyDays(days)}</td>
               </tr>`;
     }).join('');
-  list.innerHTML = rows || '<tr><td colspan="4">Подписок пока нет</td></tr>';
+  list.querySelector('tbody').innerHTML = rows || '<tr><td colspan="4">Подписок пока нет</td></tr>';
 }
-
-// добавление
 addForm.onsubmit = e =>{
   e.preventDefault();
   const {name,price,nextPay} = addForm;
@@ -40,10 +34,7 @@ addForm.onsubmit = e =>{
   addForm.reset();
   render();
 };
-
-// начальная загрузка
 document.addEventListener('DOMContentLoaded',()=>{
   render();
-  // сегодня по умолчанию
   addForm.nextPay.value = new Date().toISOString().slice(0,10);
 });
