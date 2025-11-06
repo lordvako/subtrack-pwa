@@ -20,7 +20,7 @@ function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
-      const next = addMonths(s.nextPay,1);           // всегда +1 месяц
+      const next = addMonths(s.nextPay,1);
       const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
       const status = daysLeft < 0 ? '❌' : '✅';
       return `<tr style="animation:fadeIn .4s">
@@ -45,7 +45,7 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА + ДОПОЛНИТЕЛЬНЫЕ ===
+// === СТАТИСТИКА (без дублей, цифры белые) ===
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
@@ -65,7 +65,7 @@ function updateStats(){
   document.getElementById('totalYear').textContent = yearCost;
   document.getElementById('avgDays').textContent   = avgDays;
 
-  // === ДОПОЛНИТЕЛЬНЫЕ СТАТИСТИКИ ===
+  // === ДОПОЛНИТЕЛЬНЫЕ: «₽ в год» и «дороже всего» ===
   extraStats();
 }
 
@@ -78,6 +78,7 @@ function extraStats(){
   const maxSub    = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
 
   const block = document.querySelector('.stats-grid');
+  // **вставляем БЕЗ дубля «в год»**
   block.insertAdjacentHTML('beforeend',`
     <div class="stat"><div class="num">${totalYear}</div><div class="label">₽ в год</div></div>
     <div class="stat"><div class="num">${maxSub.price} ₽</div><div class="label">дороже всего<br><small>${maxSub.name}</small></div></div>
