@@ -8,10 +8,10 @@ function setSubs(list){
   catch{ console.warn('localStorage недоступен'); }
 }
 
-// === +1 месяц ===
+// === +N месяцев ===
 function addMonths(date, n){
   const d = new Date(date);
-  d.setMonth(d.getMonth() + n);
+  d.setMonth(d.getMonth() + (+n));
   return d.toISOString().slice(0,10);
 }
 
@@ -22,7 +22,7 @@ function render(){
 
   const rows = subs
     .map((s,idx)=>{
-      const next     = addMonths(s.nextPay,1);
+      const next     = addMonths(s.nextPay, s.period);
       const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
       const status   = daysLeft < 0 ? '❌' : '✅';
       return `<tr style="animation:fadeIn .4s">
@@ -54,35 +54,29 @@ function del(idx){
 function updateStats(){
   const subs = getSubs();
   const total    = subs.length;
-  const avgPrice = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price),0)/total) : 0;
-  const yearCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*12,0)) : 0;
-  const avgDays  = total ? Math.round(subs.reduce((s,x)=>{
-                     const next = addMonths(x.nextPay,1);
-                     return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-                   },0)/total) : 0;
+  const yearCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*(12/(+x.period)),0)) : 0;
+  const mostExp  = total ? Math.max(...subs.map(x=> +x.price)) : 0;
 
-  ['totalSub','avgPrice','totalYear','avgDays']
+  ['totalSub','totalYear','mostExpensive']
     .forEach(id=>{
       const el = document.getElementById(id);
-      if(el){
-        el.textContent = {totalSub:total, avgPrice, totalYear:yearCost, avgDays}[id];
-      }
+      if(el) el.textContent = {totalSub:total, totalYear:yearCost, mostExpensive:mostExp}[id];
     });
 }
 
 // === круговая диаграмма ===
 function drawChart(){
   const canvas = document.getElementById('chart');
-  if(!canvas) return;                       // защита
+  if(!canvas) return;
   const subs = getSubs();
-  if(!subs.length){                         // если пусто – прячем canvas
+  if(!subs.length){
     canvas.style.display = 'none';
     return;
   }
   canvas.style.display = 'block';
   const ctx = canvas.getContext('2d');
 
-  if(window.myPie) window.myPie.destroy();  // уничтожаем старую диаграмму
+  if(window.myPie) window.myPie.destroy();
 
   window.myPie = new Chart(ctx,{
     type:'pie',
@@ -105,13 +99,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     form.nextPay.value = new Date().toISOString().slice(0,10);
     form.addEventListener('submit',e=>{
       e.preventDefault();
-      const {name,price,nextPay} = form;
+      const {name,price,period,nextPay} = form;
       if(!name.value || !price.value || !nextPay.value){
         alert('Заполните все поля!');
         return;
       }
       const subs = getSubs();
-      subs.push({name:name.value.trim(), price:+price.value, nextPay:nextPay.value});
+      subs.push({name:name.value.trim(), price:+price.value, period:+period.value, nextPay:nextPay.value});
       setSubs(subs);
       form.reset();
       form.nextPay.value = new Date().toISOString().slice(0,10);
