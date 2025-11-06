@@ -168,3 +168,45 @@ tbody tr:hover{
 }
 .label{font-size:.8rem;color:var(--text);text-shadow:0 0 2px rgba(0,0,0,.2)}
 canvas{margin:0 auto;display:block}
+
+/* === МОБИЛЬНАЯ АДАПТИВНОСТЬ === */
+@media (max-width: 600px) {
+  /* убираем горизонтальный скролл всей страницы */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* оборачиваем таблицу в «резиновый» контейнер */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;   /* горизонтальный скролл внутри таблицы */
+    white-space: nowrap;
+    margin: 0.75rem 0;
+    border-radius: var(--radius);
+  }
+
+  /* ячейки становятся компактнее */
+  th, td {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* корзина — фиксированная ширина, не «уезжает» */
+  .del {
+    width: 32px;
+    text-align: center;
+    padding: 0.2rem;
+  }
+
+  /* заголовок-«кнопка» чуть меньше */
+  h1 {
+    font-size: 1.25rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  /* статистика в 2 колонки вместо 3 */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
