@@ -45,95 +45,21 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА (без period) ===
+// === СТАТИСТИКА + ДОПОЛНИТЕЛЬНЫЕ ===
 function updateStats(){
   const subs = getSubs();
-  const total   = subs.length;
-  const avgPrice= total ? Math.round(subs.reduce((s,x)=>s+x.price,0)/total) : 0;
-  const yearCost= total ? Math.round(subs.reduce((s,x)=>s+x.price*12,0)) : 0;   // **всегда *12**
-  const avgDays = total ? Math.round(subs.reduce((s,x)=>{
-    const next = addMonths(x.nextPay,1);
-    return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-  },0)/total) : 0;
-
-  document.getElementById('totalSub').textContent  = total;
-  document.getElementById('avgPrice').textContent  = avgPrice;
-  document.getElementById('totalYear').textContent = yearCost;
-  document.getElementById('avgDays').textContent   = avgDays;
-}
-
-// === ДИАГРАММА PIE (цены) ===
-function drawChart(){
-  const subs = getSubs();
-  if (!subs.length) return;                       // **не рисуем, если пусто**
-  const ctx  = document.getElementById('chart').getContext('2d');
-  const data = subs.map(s=>s.price);
-  const labels = subs.map(s=>s.name);
-
-  new Chart(ctx,{
-    type:'pie',
-    data:{
-      labels:labels,
-      datasets:[{
-        data:data,
-        backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
-        borderWidth:0
-      }]
-    },
-    options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
-  });
-}
-
-// === добавление ===
-addForm.onsubmit = e =>{
-  e.preventDefault();
-  const {name,price,nextPay} = addForm;                  // **без period**
-  if(!name.value || !price.value || !nextPay.value){
-    alert('Заполните все поля!');
+  if (!subs.length){
+    // пусто – обнуляем
+    ['totalSub','avgPrice','totalYear','avgDays'].forEach(id=>document.getElementById(id).textContent='0');
     return;
   }
-  const subs = getSubs();
-  subs.push({name:name.value, price:price.value, nextPay:nextPay.value}); // **без period**
-  setSubs(subs);
-
-  alert('Подписка добавлена!');
-  console.log('Добавлено:', name.value, price.value, nextPay.value);
-
-  addForm.reset();
-  render();
-};
-// === ДОПОЛНИТЕЛЬНЫЕ СТАТИСТИКИ ===
-function extraStats(){
-  const subs = getSubs();
-  if (!subs.length) return;
-
-  // 1. Расходы в год на ВСЕ подписки (точно по периоду)
-  const totalYear = subs.reduce((s,x)=>s+x.price*(12/x.period),0);
-
-  // 2. Самая затратная подписка
-  const maxSub = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
-
-  // === ВСТАВЛЯЕМ в стат-блок ===
-  const block = document.querySelector('.stats-grid');
-  block.insertAdjacentHTML('beforeend',`
-    <div class="stat"><div class="num">${Math.round(totalYear)}</div><div class="label">₽ в год</div></div>
-    <div class="stat"><div class="num">${maxSub.price} ₽</div><div class="label">дороже всего<br><small>${maxSub.name}</small></div></div>
-  `);
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  render();
-  addForm.nextPay.value = new Date().toISOString().slice(0,10);
-});
-
-function updateStats(){
-  const subs = getSubs();
   const total   = subs.length;
-  const avgPrice= total ? Math.round(subs.reduce((s,x)=>s+x.price,0)/total) : 0;
-  const yearCost= total ? Math.round(subs.reduce((s,x)=>s+x.price*(12/x.period),0)) : 0;
-  const avgDays = total ? Math.round(subs.reduce((s,x)=>{
-    const next = addMonths(x.nextPay,+x.period);
+  const avgPrice= Math.round(subs.reduce((s,x)=>s+x.price,0)/total);
+  const yearCost= Math.round(subs.reduce((s,x)=>s+x.price*12,0));   // всегда *12
+  const avgDays = Math.round(subs.reduce((s,x)=>{
+    const next = addMonths(x.nextPay,1);
     return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-  },0)/total) : 0;
+  },0)/total);
 
   document.getElementById('totalSub').textContent  = total;
   document.getElementById('avgPrice').textContent  = avgPrice;
@@ -143,3 +69,66 @@ function updateStats(){
   // === ДОПОЛНИТЕЛЬНЫЕ СТАТИСТИКИ ===
   extraStats();
 }
+
+// === ДОПОЛНИТЕЛЬНЫЕ: «₽ в год» и «дороже всего» ===
+function extraStats(){
+  const subs = getSubs();
+  if (!subs.length) return;
+
+  const totalYear = Math.round(subs.reduce((s,x)=>s+x.price*12,0));
+  const maxSub    = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
+
+  const block = document.querySelector('.stats-grid');
+  block.insertAdjacentHTML('beforeend',`
+    <div class="stat"><div class="num">${totalYear}</div><div class="label">₽ в год</div></div>
+    <div class="stat"><div class="num">${maxSub.price} ₽</div><div class="label">дороже всего<br><small>${maxSub.name}</small></div></div>
+  `);
+}
+
+// === ДИАГРАММА PIE (цены) ===
+function drawChart(){
+  const subs = getSubs();
+  const ctx  = document.getElementById('chart').getContext('2d');
+  if (!subs.length) {        // **не рисуем, если пусто**
+    document.getElementById('chart').style.display='none';
+    return;
+  }
+  document.getElementById('chart').style.display='block';
+
+  const data   = subs.map(s=>s.price);
+  const labels = subs.map(s=>s.name);
+
+  new Chart(ctx,{
+    type:'pie',
+    data:{
+      labels:labels,
+      datasets:[{
+        data:data,
+backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
+borderWidth:0
+}]
+},
+options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
+});
+}
+// === добавление ===
+addForm.onsubmit = e =>{
+e.preventDefault();
+const {name,price,nextPay} = addForm;                  // без period
+if(!name.value || !price.value || !nextPay.value){
+alert('Заполните все поля!');
+return;
+}
+const subs = getSubs();
+subs.push({name:name.value, price:price.value, next
+Pay:nextPay.value}); // без period
+setSubs(subs);
+alert('Подписка добавлена!');
+console.log('Добавлено:', name.value, price.value, nextPay.value);
+addForm.reset();
+render();
+};
+document.addEventListener('DOMContentLoaded',()=>{
+render();
+addForm.nextPay.value = new Date().toISOString().slice(0,10);
+});
