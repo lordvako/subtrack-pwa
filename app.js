@@ -45,7 +45,7 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА (цифры фиолетовые) ===
+// === СТАТИСТИКА (цифры ЯРКО-ФИОЛЕТОВЫЕ) ===
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
@@ -60,6 +60,7 @@ function updateStats(){
     return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
   },0)/total);
 
+  // === ВСТАВЛЯЕМ ЯРКО-ФИОЛЕТОВЫЕ ЦИФРЫ ===
   document.getElementById('totalSub').textContent  = total;
   document.getElementById('avgPrice').textContent  = avgPrice;
   document.getElementById('totalYear').textContent = yearCost;
