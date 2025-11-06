@@ -45,48 +45,43 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА (цифры ЯРКО-ФИОЛЕТОВЫЕ) ===
+// === СТАТИСТИКА: только 3 пункта ===
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
-    ['totalSub','avgPrice','totalYear','avgDays'].forEach(id=>document.getElementById(id).textContent='0');
+    ['totalSub','totalYear','mostExpensive'].forEach(id=>document.getElementById(id).textContent='0');
     return;
   }
-  const total   = subs.length;
-  const avgPrice= Math.round(subs.reduce((s,x)=>s+x.price,0)/total);
-  const yearCost= Math.round(subs.reduce((s,x)=>s+x.price*12,0));   // всегда *12
-  const avgDays = Math.round(subs.reduce((s,x)=>{
-    const next = addMonths(x.nextPay,1);
-    return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-  },0)/total);
+  const total     = subs.length;
+  const yearCost  = Math.round(subs.reduce((s,x)=>s+x.price*12,0));   // всегда *12
+  const mostSub   = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
 
-  // === ВСТАВЛЯЕМ ЯРКО-ФИОЛЕТОВЫЕ ЦИФРЫ ===
-  document.getElementById('totalSub').textContent  = total;
-  document.getElementById('avgPrice').textContent  = avgPrice;
-  document.getElementById('totalYear').textContent = yearCost;
-  document.getElementById('avgDays').textContent   = avgDays;
+  document.getElementById('totalSub').textContent      = total;
+  document.getElementById('totalYear').textContent     = yearCost;
+  document.getElementById('mostExpensive').textContent = mostSub.price + ' ₽';
+  document.getElementById('mostExpName').textContent   = mostSub.name;
 
-  // === ДОПОЛНИТЕЛЬНЫЕ: «₽ в год» и «дороже всего» ===
+  // === ДОПОЛНИТЕЛЬНЫЕ: только 2 пункта ===
   extraStats();
 }
 
-// === ДОПОЛНИТЕЛЬНЫЕ: «₽ в год» и «дороже всего» ===
+// === ДОПОЛНИТЕЛЬНЫЕ: только 2 пункта ===
 function extraStats(){
   const subs = getSubs();
   if (!subs.length) return;
 
   const totalYear = Math.round(subs.reduce((s,x)=>s+x.price*12,0));
-  const maxSub    = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
+  const mostSub   = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
 
   const block = document.querySelector('.stats-grid');
   // **вставляем БЕЗ дубля «в год»**
   block.insertAdjacentHTML('beforeend',`
     <div class="stat"><div class="num">${totalYear}</div><div class="label">₽ в год</div></div>
-    <div class="stat"><div class="num">${maxSub.price} ₽</div><div class="label">дороже всего<br><small>${maxSub.name}</small></div></div>
+    <div class="stat"><div class="num">${mostSub.price} ₽</div><div class="label">дороже всего<br><small>${mostSub.name}</small></div></div>
   `);
 }
 
-// === ДИАГРАММА PIE (цены) ===
+// === ДИАГРАММА PIE (круглая, без изменений) ===
 function drawChart(){
   const subs = getSubs();
   const ctx  = document.getElementById('chart').getContext('2d');
