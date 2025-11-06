@@ -82,3 +82,29 @@ canvas{margin:0 auto;display:block}
   button[type="submit"]{-webkit-appearance:none;appearance:none;width:48px;height:48px;border-radius:50%;}
   input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:#fff;border:1px solid #ccc}
 }
+
+/* ===== ANDROID-ФИКС: видимая кнопка + яркие цифры ===== */
+@media (max-width: 600px) {
+  .title-btn{
+    -webkit-appearance:none;appearance:none;
+    display:block;margin:0 auto 1rem;
+    padding:.6rem 1.8rem;font-size:1.4rem;font-weight:700;
+    color:#fff;border:none;border-radius:30px;
+    background:linear-gradient(135deg,#ff4d6d,#ff758f);
+    box-shadow:0 4px 12px rgba(0,0,0,.15),0 0 12px rgba(255,77,109,.35);
+    animation:pulse 2s infinite;
+  }
+  .grad{
+    background:linear-gradient(135deg,#6750a4,#9a7bc6,#c9b6e4,#e6d7f4,#f3edf7);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:700;
+  }
+  button[type="submit"]{-webkit-appearance:none;appearance:none;width:48px;height:48px;border-radius:50%;}
+  input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:#fff;border:1px solid #ccc}
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,77,109,.4);}
+  70%{box-shadow:0 0 0 10px rgba(255,77,109,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,77,109,0);}
+}
