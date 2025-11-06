@@ -49,7 +49,6 @@ function del(idx){
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
-    // пусто – обнуляем
     ['totalSub','avgPrice','totalYear','avgDays'].forEach(id=>document.getElementById(id).textContent='0');
     return;
   }
@@ -89,7 +88,7 @@ function extraStats(){
 function drawChart(){
   const subs = getSubs();
   const ctx  = document.getElementById('chart').getContext('2d');
-  if (!subs.length) {        // **не рисуем, если пусто**
+  if (!subs.length){        // **не рисуем, если пусто**
     document.getElementById('chart').style.display='none';
     return;
   }
@@ -104,31 +103,34 @@ function drawChart(){
       labels:labels,
       datasets:[{
         data:data,
-backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
-borderWidth:0
-}]
-},
-options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
-});
+        backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
+        borderWidth:0
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
+  });
 }
+
 // === добавление ===
 addForm.onsubmit = e =>{
-e.preventDefault();
-const {name,price,nextPay} = addForm;                  // без period
-if(!name.value || !price.value || !nextPay.value){
-alert('Заполните все поля!');
-return;
-}
-const subs = getSubs();
-subs.push({name:name.value, price:price.value, next
-Pay:nextPay.value}); // без period
-setSubs(subs);
-alert('Подписка добавлена!');
-console.log('Добавлено:', name.value, price.value, nextPay.value);
-addForm.reset();
-render();
+  e.preventDefault();
+  const {name,price,period,nextPay} = addForm;
+  if(!name.value || !price.value || !nextPay.value){
+    alert('Заполните все поля!');
+    return;
+  }
+  const subs = getSubs();
+  subs.push({name:name.value, price:price.value, period:period.value, nextPay:nextPay.value});
+  setSubs(subs);
+
+  alert('Подписка добавлена!');
+  console.log('Добавлено:', name.value, price.value, period.value, nextPay.value);
+
+  addForm.reset();
+  render();
 };
+
 document.addEventListener('DOMContentLoaded',()=>{
-render();
-addForm.nextPay.value = new Date().toISOString().slice(0,10);
+  render();
+  addForm.nextPay.value = new Date().toISOString().slice(0,10);
 });
