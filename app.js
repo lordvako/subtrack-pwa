@@ -96,18 +96,21 @@ function updateStats(){
                      return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
                    },0)/total) : 0;
 
-  /* ↓↓↓ только ИМЯ самой дорогой подписки ↓↓↓ */
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
+  /* жёсткий фоллбэк: если элемента нет – создаём */
   ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
     .forEach(id=>{
-      const el=document.getElementById(id);
-      if(el){
-        el.textContent=
-          id==='mostExpensive'?mostExpName
-                             :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
+      let el=document.getElementById(id);
+      if(!el){
+        el=document.createElement('div');
+        el.id=id;
+        document.querySelector('.stats-grid').appendChild(el);
       }
+      el.textContent=
+        id==='mostExpensive'?mostExpName
+                           :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
     });
 }
 
@@ -154,4 +157,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   render();
 });
+
 
