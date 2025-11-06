@@ -125,3 +125,21 @@ document.addEventListener('DOMContentLoaded',()=>{
   addForm.nextPay.value = new Date().toISOString().slice(0,10);
 });
 
+function updateStats(){
+  const subs = getSubs();
+  const total   = subs.length;
+  const avgPrice= total ? Math.round(subs.reduce((s,x)=>s+x.price,0)/total) : 0;
+  const yearCost= total ? Math.round(subs.reduce((s,x)=>s+x.price*(12/x.period),0)) : 0;
+  const avgDays = total ? Math.round(subs.reduce((s,x)=>{
+    const next = addMonths(x.nextPay,+x.period);
+    return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
+  },0)/total) : 0;
+
+  document.getElementById('totalSub').textContent  = total;
+  document.getElementById('avgPrice').textContent  = avgPrice;
+  document.getElementById('totalYear').textContent = yearCost;
+  document.getElementById('avgDays').textContent   = avgDays;
+
+  // === ДОПОЛНИТЕЛЬНЫЕ СТАТИСТИКИ ===
+  extraStats();
+}
