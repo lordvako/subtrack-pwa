@@ -1,20 +1,18 @@
 // === localStorage ===
-function getSubs(){ return JSON.parse(localStorage.getItem('subs')||'[]'); }
-function setSubs(list){ localStorage.setItem('subs',JSON.stringify(list)); }
+function getSubs(){
+  try{ return JSON.parse(localStorage.getItem('subs')||'[]'); }
+  catch{ return []; }
+}
+function setSubs(list){
+  try{ localStorage.setItem('subs',JSON.stringify(list)); }
+  catch{ console.warn('localStorage недоступен'); }
+}
 
-// === добавить N месяцев ===
+// === +1 месяц (как было) ===
 function addMonths(date, n){
   const d = new Date(date);
   d.setMonth(d.getMonth() + n);
   return d.toISOString().slice(0,10);
-}
-
-// === красиво «осталось» ===
-function prettyDays(d){
-  if(d<0) return 'просрочено';
-  if(d===0) return 'сегодня';
-  if(d===1) return 'завтра';
-  return `${d} дн.`;
 }
 
 // === рендер таблицы ===
@@ -22,14 +20,14 @@ function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
-      const next      = addMonths(s.nextPay, +s.period);   // точный период
-      const daysLeft  = Math.ceil((new Date(next) - new Date()) / 86400000);
-      const status    = daysLeft < 0 ? '❌' : '✅';
+      const next = addMonths(s.nextPay,1);           // всегда +1 месяц
+      const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
+      const status = daysLeft < 0 ? '❌' : '✅';
       return `<tr>
                 <td>${s.name}</td>
                 <td>${s.price} ₽</td>
                 <td>${next}</td>
-                <td class="days">${prettyDays(daysLeft)}</td>
+                <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
                 <td class="status">${status}</td>
                 <td class="del" onclick="del(${idx})">🗑️</td>
               </tr>`;
@@ -48,10 +46,19 @@ function del(idx){
 // === добавление ===
 addForm.onsubmit = e =>{
   e.preventDefault();
-  const {name,price,period,nextPay} = addForm;
+  const {name,price,nextPay} = addForm;                  // **без period**
+  if(!name.value || !price.value || !nextPay.value){
+    alert('Заполните все поля!');
+    return;
+  }
   const subs = getSubs();
-  subs.push({name:name.value, price:price.value, period:period.value, nextPay:nextPay.value});
+  subs.push({name:name.value, price:price.value, nextPay:nextPay.value}); // **без period**
   setSubs(subs);
+
+  // === визуальное подтверждение ===
+  alert('Подписка добавлена!');
+  console.log('Добавлено:', name.value, price.value, nextPay.value);
+
   addForm.reset();
   render();
 };
