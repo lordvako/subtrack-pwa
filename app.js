@@ -50,29 +50,27 @@ function del(idx){
   render();
 }
 
-// === статистика (4 пункта) ===
+// === статистика (5 показателей) ===
 function updateStats(){
   const subs = getSubs();
-  const total    = subs.length;
-  const avgPrice = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price),0)/total) : 0;
-  const yearCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*(12/(+x.period)),0)) : 0;
-  const avgDays  = total ? Math.round(subs.reduce((s,x)=>{
-                     const next = addMonths(x.nextPay, x.period);
-                     return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-                   },0)/total) : 0;
-  const monthCost= total ? Math.round(subs.reduce((s,x)=>s+ (+x.price),0)) : 0; // ← ₽ в месяц
-
+  const total     = subs.length;
+  const monthCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price),0)) : 0;
+  const yearCost  = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*(12/(+x.period)),0)) : 0;
+  const avgDays   = total ? Math.round(subs.reduce((s,x)=>{
+                      const next = addMonths(x.nextPay,x.period);
+                      return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
+                    },0)/total) : 0;
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
   /* обновляем 5 ячеек */
   ['totalSub','monthCost','totalYear','avgDays','mostExpensive']
     .forEach(id=>{
-      const el = document.getElementById(id);
+      const el=document.getElementById(id);
       if(el){
-        el.textContent =
-          id==='mostExpensive' ? mostExpName
-                               : {totalSub:total, monthCost, totalYear:yearCost, avgDays}[id];
+        el.textContent=
+          id==='mostExpensive'?mostExpName
+                             :{totalSub:total,monthCost,yearCost,avgDays}[id];
       }
     });
 }
@@ -82,48 +80,38 @@ function drawChart(){
   const canvas = document.getElementById('chart');
   if(!canvas) return;
   const subs = getSubs();
-  if(!subs.length){
-    canvas.style.display = 'none';
-    return;
-  }
-  canvas.style.display = 'block';
-  const ctx = canvas.getContext('2d');
-
+  if(!subs.length){ canvas.style.display='none'; return; }
+  canvas.style.display='block';
+  const ctx=canvas.getContext('2d');
   if(window.myPie) window.myPie.destroy();
-
-  window.myPie = new Chart(ctx,{
+  window.myPie=new Chart(ctx,{
     type:'pie',
     data:{
       labels: subs.map(s=>s.name),
-      datasets:[{
-        data: subs.map(s=> +s.price),
-        backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
-        borderWidth:0
-      }]
+      datasets:[{ data:subs.map(s=>+s.price),
+                  backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
+                  borderWidth:0 }]
     },
     options:{ responsive:true, plugins:{ legend:{ display:false } }, cutout:'60%' }
   });
 }
 
-// === добавление новой подписки ===
+// === добавление подписки ===
 document.addEventListener('DOMContentLoaded',()=>{
-  const form = document.getElementById('addForm');
+  const form=document.getElementById('addForm');
   if(form){
-    form.nextPay.value = new Date().toISOString().slice(0,10);
+    form.nextPay.value=new Date().toISOString().slice(0,10);
     form.addEventListener('submit',e=>{
       e.preventDefault();
-      const {name,price,period,nextPay} = form;
-      if(!name.value || !price.value || !nextPay.value){
-        alert('Заполните все поля!');
-        return;
-      }
-      const subs = getSubs();
+      const {name,price,period,nextPay}=form;
+      if(!name.value||!price.value||!nextPay.value){ alert('Заполните все поля!'); return; }
+      const subs=getSubs();
       subs.push({name:name.value.trim(), price:+price.value, period:+period.value, nextPay:nextPay.value});
       setSubs(subs);
       form.reset();
-      form.nextPay.value = new Date().toISOString().slice(0,10);
+      form.nextPay.value=new Date().toISOString().slice(0,10);
       render();
     });
   }
-  render();   // первичный рендер
+  render();
 });
