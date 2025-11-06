@@ -20,20 +20,18 @@ function render(){
   const subs = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay));
 
-  const rows = subs
-    .map((s,idx)=>{
-      const next     = addMonths(s.nextPay,1);
-      const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
-     const status   = daysLeft < 0 ? '❌' : '✅';
-return `<tr style="animation:fadeIn .4s">
-          <td>${s.name}</td>
-          <td>${s.price} ₽</td>
-          <td>${next}</td>
-          <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
-          <td class="status">${status}</td>   <!-- оставили только иконку -->
-          <td class="del" onclick="del(${idx})">🗑️</td>
-        </tr>`;
-    }).join('');
+  const rows = subs.map((s,idx)=>{
+  const next     = addMonths(s.nextPay, s.period);
+  const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
+  const status   = daysLeft < 0 ? '❌' : '✅';
+  return `<tr data-idx="${idx}" style="animation:fadeIn .4s">
+            <td>${s.name}</td>
+            <td>${s.price} ₽</td>
+            <td>${next}</td>
+            <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
+            <td class="status">${status}</td>
+          </tr>`;          // нет колонки корзины
+}).join('');
 
   const tbody = document.querySelector('#list tbody');
   if(tbody) tbody.innerHTML = rows || '<tr><td colspan="6">Подписок пока нет</td></tr>';
@@ -121,3 +119,33 @@ document.addEventListener('DOMContentLoaded',()=>{
   render();   // первичный рендер
 });
 
+// ===== SWIPE-УДАЛЕНИЕ =====
+let touchStartX = 0;
+let touchEndX   = 0;
+
+document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive:true});
+document.addEventListener('touchend',   e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe(e.target);
+}, {passive:true});
+
+function handleSwipe(el){
+  const row = el.closest('tr');
+  if(!row) return;
+  const deltaX = touchStartX - touchEndX;
+  if(deltaX < 80) return;                      // свайп влево > 80px
+
+  const idx = row.dataset.idx;                 // индекс строки
+  if(idx === undefined) return;
+
+  // анимация «уезжает влево»
+  row.style.transition = 'transform .3s';
+  row.style.transform  = 'translateX(-110%)';
+
+  setTimeout(() => {
+    const subs = getSubs();
+    subs.splice(idx, 1);
+    setSubs(subs);
+    render();               // перерисуем без удалённой строки
+  }, 300);
+}
