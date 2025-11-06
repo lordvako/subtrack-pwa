@@ -63,3 +63,28 @@ th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
 
 /* ========== ДИАГРАММА ========== */
 canvas{display:block;margin:0 auto}
+
+/* центральная карточка статистики */
+.stats-card{
+  max-width:420px;
+  margin:1.5rem auto;          /* по центру */
+  background:#ffffffcc;
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.6);
+  padding:1rem;
+  backdrop-filter:blur(10px);
+}
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);  /* 3 колонки */
+  gap:1rem;
+  margin-bottom:1rem;
+}
+.stat{text-align:center}
+.num{font-size:2rem;font-weight:700;
+  background:linear-gradient(135deg,#6750a4,#9a7bc6,#c9b6e4,#e6d7f4,#f3edf7);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.label{font-size:.8rem;color:var(--text);margin-top:.2rem}
+canvas{margin:0 auto;display:block}
