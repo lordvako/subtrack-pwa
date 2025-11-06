@@ -44,16 +44,18 @@ button:hover{transform:scale(1.12);box-shadow:0 6px 14px rgba(255,77,109,.5),0 0
   100%{box-shadow:0 0 0 0 rgba(255,77,109,0);}
 }
 
-/* ========== ТАБЛИЦА ========== */
-table{
-  width:100%;
-  display:block;              /* разрешаем скролл */
-  overflow-x:auto;
-  white-space:nowrap;
-  border-collapse:collapse;
+/* ========== ТАБЛИЦА: на всю ширину + скролл внутри ========== */
+.table-wrapper{
+  width:100%;               /* растягиваемся на всю ширину контейнера */
+  overflow-x:auto;          /* скролл по горизонтали */
   background:#fff;
   border-radius:8px;
-  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+table{
+  width:100%;               /* внутри скролла – полная ширина */
+  border-collapse:collapse;
+  min-width:360px;          /* минимум 360px – не сжимаемся слишком */
 }
 th,td{padding:.5rem .4rem;font-size:.9rem;text-align:left;border-bottom:1px solid #eee}
 th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
