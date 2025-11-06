@@ -10,33 +10,111 @@
   --font:'Roboto',sans-serif;
   font-size:14px;
 }
-body{font-family:var(--font);color:var(--text);width:100vw;overflow-x:hidden;background:url('https://source.unsplash.com/1600x900/?abstract,gradient') center/cover fixed}
+body{
+  font-family:var(--font);
+  color:var(--text);
+  width:100vw;
+  overflow-x:hidden;
+  background:url('https://source.unsplash.com/1600x900/?abstract,gradient') center/cover fixed;
+}
 
 /* === ЗАГОЛОВОК === */
 header{padding:1rem;text-align:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px)}
 h1{font-size:1.4rem;font-weight:500;letter-spacing:.5px}
 h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
 
-/* === ФОРМА И ТАБЛИЦА (как было) === */
-.form-card,.stats-card{background:rgba(255,255,255,.25);border-radius:var(--radius);box-shadow:var(--shadow);padding:1rem;margin:.75rem;backdrop-filter:blur(10px)}
+/* === ФОРМА (без изменений) === */
+.form-card,.stats-card{
+  background:rgba(255,255,255,.25);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:1rem;
+  margin:.75rem;
+  backdrop-filter:blur(10px);
+}
 form{display:flex;flex-direction:column;gap:.6rem}
-input,select{padding:.75rem 1rem;border:none;border-radius:12px;font-size:1rem;background:rgba(255,255,255,.8)}
+input,select{
+  padding:.75rem 1rem;
+  border:none;
+  border-radius:12px;
+  font-size:1rem;
+  background:rgba(255,255,255,.8);
+}
 .date-line{display:flex;gap:.5rem;align-items:center}
-button{flex:0 0 44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#9a7bc6);color:#fff;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 10px rgba(103,80,164,.4);transition:transform .2s,box-shadow .2s}
+button{
+  flex:0 0 44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),#9a7bc6);
+  color:#fff;
+  border:none;
+  font-size:1.4rem;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(103,80,164,.4);
+  transition:transform .2s,box-shadow .2s;
+}
 button:hover{transform:scale(1.08);box-shadow:0 6px 14px rgba(103,80,164,.5)}
 
-table{width:100%;border-collapse:collapse;font-size:.95rem;margin:.75rem;background:rgba(255,255,255,.2);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
-thead{background:linear-gradient(135deg,var(--primary),#9a7bc6);color:#fff}
+/* === ТАБЛИЦА === */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.95rem;
+  margin:.75rem;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+}
+thead{
+  background:linear-gradient(135deg,var(--primary),#9a7bc6);
+  color:#fff;
+}
 th,td{padding:.6rem .75rem;text-align:left}
 td{border-bottom:1px solid rgba(255,255,255,.1)}
+
+/* === новый градиент для всех строк tbody === */
+tbody tr{
+  background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(230,220,240,.25));
+  transition:background .25s;
+}
+tbody tr:nth-child(even){
+  background:linear-gradient(135deg,rgba(240,235,245,.25),rgba(220,215,235,.25));
+}
+tbody tr:hover{
+  background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(240,235,245,.35));
+}
+
 .days{font-size:.75rem;opacity:.8}
 .status{font-size:1.2rem;padding:0 .2rem}
-.del{cursor:pointer;font-size:1.2rem;padding:.2rem .4rem;border-radius:4px;transition:background .2s}
+.del{
+  cursor:pointer;
+  font-size:1.2rem;
+  padding:.2rem .4rem;
+  border-radius:4px;
+  transition:background .2s;
+}
 .del:hover{background:rgba(103,80,164,.2)}
 
-/* === СТАТИСТИКА (только 3 пункта) === */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
-.stat{text-align:center;background:rgba(255,255,255,.15);border-radius:12px;padding:.75rem;backdrop-filter:blur(5px)}
-.num{font-size:2rem;font-weight:700;color:#9a7bc6;text-shadow:0 0 4px rgba(0,0,0,.2)}
+/* === СТАТИСТИКА === */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+  margin-bottom:1rem;
+}
+.stat{
+  text-align:center;
+  background:rgba(255,255,255,.15);
+  border-radius:12px;
+  padding:.75rem;
+  backdrop-filter:blur(5px);
+}
+.num{
+  font-size:2rem;
+  font-weight:700;
+  color:#9a7bc6;
+  text-shadow:0 0 4px rgba(0,0,0,.2);
+}
 .label{font-size:.8rem;color:#1d1b20;text-shadow:0 0 2px rgba(0,0,0,.2)}
 canvas{margin:0 auto;display:block}
