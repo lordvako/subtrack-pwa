@@ -45,16 +45,25 @@ button:hover{transform:scale(1.12);box-shadow:0 6px 14px rgba(255,77,109,.5),0 0
 }
 
 /* ========== ТАБЛИЦА ========== */
-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
-th,td{padding:.5rem;font-size:.9rem;text-align:left;border-bottom:1px solid #eee}
+table{
+  width:100%;
+  display:block;              /* разрешаем скролл */
+  overflow-x:auto;
+  white-space:nowrap;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+}
+th,td{padding:.5rem .4rem;font-size:.9rem;text-align:left;border-bottom:1px solid #eee}
 th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
-.del{cursor:pointer;padding:0 .3rem;font-size:1.1rem;transition:color .2s}
+.del{cursor:pointer;padding:0 .25rem;font-size:1.1rem;transition:color .2s}
 .del:hover{color:#ff4d6d}
 
 /* ========== ЦЕНТРАЛЬНАЯ СТАТИСТИКА ========== */
 .stats-card{
   max-width:420px;
-  margin:1.5rem auto;          /* по центру */
+  margin:1.5rem auto;
   background:#ffffffcc;
   border-radius:16px;
   box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.6);
@@ -63,7 +72,7 @@ th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
 }
 .stats-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);  /* 3 колонки */
+  grid-template-columns:repeat(3,1fr);
   gap:1rem;
   margin-bottom:1rem;
 }
@@ -78,7 +87,7 @@ canvas{margin:0 auto;display:block}
 
 /* ========== АДАПТИВ ANDROID (WebView) ========== */
 @media (max-width: 600px) {
-  h1{-webkit-text-fill-color:#fff!important;color:#fff!important;}   /* белый текст в кнопке */
+  h1{-webkit-text-fill-color:#fff!important;color:#fff!important;}
   button[type="submit"]{-webkit-appearance:none;appearance:none;width:48px;height:48px;border-radius:50%;}
   input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:#fff;border:1px solid #ccc}
 }
