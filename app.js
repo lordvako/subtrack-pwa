@@ -102,8 +102,26 @@ addForm.onsubmit = e =>{
   addForm.reset();
   render();
 };
+// === ДОПОЛНИТЕЛЬНЫЕ СТАТИСТИКИ ===
+function extraStats(){
+  const subs = getSubs();
+  if (!subs.length) return;
 
+  // 1. Расходы в год на ВСЕ подписки (точно по периоду)
+  const totalYear = subs.reduce((s,x)=>s+x.price*(12/x.period),0);
+
+  // 2. Самая затратная подписка
+  const maxSub = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
+
+  // === ВСТАВЛЯЕМ в стат-блок ===
+  const block = document.querySelector('.stats-grid');
+  block.insertAdjacentHTML('beforeend',`
+    <div class="stat"><div class="num">${Math.round(totalYear)}</div><div class="label">₽ в год</div></div>
+    <div class="stat"><div class="num">${maxSub.price} ₽</div><div class="label">дороже всего<br><small>${maxSub.name}</small></div></div>
+  `);
+}
 document.addEventListener('DOMContentLoaded',()=>{
   render();
   addForm.nextPay.value = new Date().toISOString().slice(0,10);
 });
+
