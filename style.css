@@ -1,8 +1,8 @@
 /* === BASE === */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f3edf7;
-  --surface:#fff;
+  --bg:#f5f2fa;                 /* нежный фон страницы */
+  --surface:#ffffffcc;          /* полупрозрачный белый для карточек */
   --primary:#6750a4;
   --text:#1d1b20;
   --radius:16px;
@@ -15,17 +15,17 @@ body{
   color:var(--text);
   width:100vw;
   overflow-x:hidden;
-  background:url('https://source.unsplash.com/1600x900/?abstract,gradient') center/cover fixed;
+  background:linear-gradient(135deg,#f5f2fa 0%,#e6dff3 100%) fixed;
 }
 
 /* === ЗАГОЛОВОК === */
-header{padding:1rem;text-align:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px)}
+header{padding:1rem;text-align:center;background:var(--surface);backdrop-filter:blur(10px)}
 h1{font-size:1.4rem;font-weight:500;letter-spacing:.5px}
 h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
 
 /* === ФОРМА === */
 .form-card,.stats-card{
-  background:rgba(255,255,255,.25);
+  background:var(--surface);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:1rem;
@@ -33,21 +33,16 @@ h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
   backdrop-filter:blur(10px);
 }
 form{display:flex;flex-direction:column;gap:.6rem}
-
-/* === поля ввода: серый градиент + тонкая обводка === */
 input,select{
   padding:.75rem 1rem;
-  border:1px solid rgba(255,255,255,.4);   /* тонкая светлая рамка */
+  border:1px solid rgba(255,255,255,.4);
   border-radius:12px;
   font-size:1rem;
   background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(230,220,240,.25));
   color:var(--text);
   transition:border .2s;
 }
-input:focus,select:focus{
-  outline:none;
-  border-color:var(--primary);
-}
+input:focus,select:focus{outline:none;border-color:var(--primary)}
 
 .date-line{display:flex;gap:.5rem;align-items:center}
 button{
@@ -73,6 +68,7 @@ table{
   border-radius:var(--radius);
   overflow:hidden;
   box-shadow:var(--shadow);
+  background:var(--surface);
   backdrop-filter:blur(10px);
 }
 thead{
@@ -80,8 +76,7 @@ thead{
   color:#fff;
 }
 th,td{padding:.6rem .75rem;text-align:left}
-td{border-bottom:1px solid rgba(255,255,255,.1)}
-
+td{border-bottom:1px solid rgba(255,255,255,.3)}
 tbody tr{
   background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(230,220,240,.25));
   transition:background .25s;
@@ -92,7 +87,6 @@ tbody tr:nth-child(even){
 tbody tr:hover{
   background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(240,235,245,.35));
 }
-
 .days{font-size:.75rem;opacity:.8}
 .status{font-size:1.2rem;padding:0 .2rem}
 .del{
@@ -116,7 +110,6 @@ tbody tr:hover{
   background:rgba(255,255,255,.15);
   border-radius:12px;
   padding:.75rem;
-  backdrop-filter:blur(5px);
 }
 .num{
   font-size:2rem;
@@ -124,5 +117,5 @@ tbody tr:hover{
   color:#9a7bc6;
   text-shadow:0 0 4px rgba(0,0,0,.2);
 }
-.label{font-size:.8rem;color:#1d1b20;text-shadow:0 0 2px rgba(0,0,0,.2)}
+.label{font-size:.8rem;color:var(--text);text-shadow:0 0 2px rgba(0,0,0,.2)}
 canvas{margin:0 auto;display:block}
