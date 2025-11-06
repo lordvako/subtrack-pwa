@@ -49,6 +49,7 @@ td{border-bottom:1px solid rgba(255,255,255,.1)}
 }
 .stat .label{
   font-size:.8rem;
-  color:#e6d7f4;           /* светло-фиолетовый */
+  color:#1d1b20;           /* светло-фиолетовый */
   text-shadow:0 0 2px rgba(0,0,0,.2);
 }
+
