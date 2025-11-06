@@ -51,6 +51,7 @@ function del(idx){
 }
 
 // === статистика ===
+// === статистика ===
 function updateStats(){
   const subs = getSubs();
   const total    = subs.length;
@@ -61,11 +62,23 @@ function updateStats(){
                      return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
                    },0)/total) : 0;
 
-  ['totalSub','avgPrice','totalYear','avgDays']
+  /* ↓↓↓ новые 4 строки ↓↓↓ */
+  let mostExpName  = '-', mostExpPrice = 0;
+  if(total){
+    const maxSub = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max);
+    mostExpName  = maxSub.name;
+    mostExpPrice = maxSub.price;
+  }
+  /* ↑↑↑ конец новых строк ↑↑↑ */
+
+  /* обновляем все 5 ячеек статистики */
+  ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
     .forEach(id=>{
       const el = document.getElementById(id);
       if(el){
-        el.textContent = {totalSub:total, avgPrice, totalYear:yearCost, avgDays}[id];
+        el.textContent =
+          id==='mostExpensive' ? `${mostExpName} – ${mostExpPrice} ₽`
+                               : {totalSub:total, avgPrice, totalYear:yearCost, avgDays}[id];
       }
     });
 }
@@ -120,3 +133,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   render();   // первичный рендер
 });
+
