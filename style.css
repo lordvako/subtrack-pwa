@@ -23,7 +23,7 @@ header{padding:1rem;text-align:center;background:rgba(255,255,255,.15);backdrop-
 h1{font-size:1.4rem;font-weight:500;letter-spacing:.5px}
 h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
 
-/* === ФОРМА (без изменений) === */
+/* === ФОРМА === */
 .form-card,.stats-card{
   background:rgba(255,255,255,.25);
   border-radius:var(--radius);
@@ -33,13 +33,22 @@ h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
   backdrop-filter:blur(10px);
 }
 form{display:flex;flex-direction:column;gap:.6rem}
+
+/* === поля ввода: серый градиент + тонкая обводка === */
 input,select{
   padding:.75rem 1rem;
-  border:none;
+  border:1px solid rgba(255,255,255,.4);   /* тонкая светлая рамка */
   border-radius:12px;
   font-size:1rem;
-  background:rgba(255,255,255,.8);
+  background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(230,220,240,.25));
+  color:var(--text);
+  transition:border .2s;
 }
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--primary);
+}
+
 .date-line{display:flex;gap:.5rem;align-items:center}
 button{
   flex:0 0 44px;
@@ -73,7 +82,6 @@ thead{
 th,td{padding:.6rem .75rem;text-align:left}
 td{border-bottom:1px solid rgba(255,255,255,.1)}
 
-/* === новый градиент для всех строк tbody === */
 tbody tr{
   background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(230,220,240,.25));
   transition:background .25s;
