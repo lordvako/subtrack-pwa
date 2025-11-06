@@ -85,7 +85,7 @@ document.addEventListener('click', e => {
   }
 });
 
-// === статистика ===
+// === статистика (4 показателя) ==========
 function updateStats(){
   const subs = getSubs();
   const total    = subs.length;
@@ -96,11 +96,17 @@ function updateStats(){
                      return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
                    },0)/total) : 0;
 
-  ['totalSub','avgPrice','totalYear','avgDays']
+  /* ↓↓↓ только ИМЯ самой дорогой подписки ↓↓↓ */
+  let mostExpName = '-';
+  if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
+
+  ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
     .forEach(id=>{
-      const el = document.getElementById(id);
+      const el=document.getElementById(id);
       if(el){
-        el.textContent = {totalSub:total, avgPrice, totalYear:yearCost, avgDays}[id];
+        el.textContent=
+          id==='mostExpensive'?mostExpName
+                             :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
       }
     });
 }
@@ -148,3 +154,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   render();
 });
+
