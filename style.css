@@ -93,3 +93,20 @@ canvas{margin:0 auto;display:block}
   button[type="submit"]{-webkit-appearance:none;appearance:none;width:48px;height:48px;border-radius:50%;}
   input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:#fff;border:1px solid #ccc}
 }
+
+/* ===== Android-WebView: таблица влезает без съезда ===== */
+@media (max-width: 600px) {
+  /* убираем системный скролл всей страницы */
+  html,body{overflow-x:hidden}
+
+  /* обёртка – на всю ширину экрана, скролл внутри */
+  .table-wrapper{
+    width:100vw;                 /* на всю ширину телефона */
+    overflow-x:auto;             /* скролл только внутри */
+    -webkit-overflow-scrolling:touch; /* плавный скролл iOS/Android */
+  }
+  table{min-width:360px}         /* не сжимаемся меньше 360px */
+
+  /* мелкие ячейки – больше помещается */
+  th,td{padding:.4rem;font-size:.8rem}
+}
