@@ -129,3 +129,16 @@ canvas{margin:0 auto;display:block}
   /* корзина поменьше */
   .del{padding:0 .2rem;font-size:1rem}
 }
+
+/* ===== Android: компактная таблица ===== */
+@media (max-width: 600px) {
+  html,body{overflow-x:hidden}
+  .table-wrapper{width:100vw;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:300px}                      /* можно ещье уже */
+
+  th,td{padding:.25rem .2rem;font-size:.7rem}   /* ещё компактнее */
+  td:nth-child(2){white-space:nowrap}          /* цена в одну строку */
+  td:nth-child(4){font-size:.65rem}            /* «До конца» поменьше */
+  td:nth-child(5){padding:0 .15rem;font-size:1rem} /* иконка статуса */
+  .del{padding:0 .15rem;font-size:.9rem}       /* корзина поменьше */
+}
