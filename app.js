@@ -17,7 +17,7 @@ function addMonths(date, n){
 
 // === рендер таблицы ===
 function render(){
-  const rows = getSubs()
+  const subs = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
       const next = addMonths(s.nextPay,1);
@@ -45,7 +45,7 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА: только 3 пункта ===
+// === СТАТИСТИКА (только 3 пункта) ===
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
@@ -54,38 +54,20 @@ function updateStats(){
   }
   const total     = subs.length;
   const yearCost  = Math.round(subs.reduce((s,x)=>s+x.price*12,0));   // всегда *12
-  const mostSub   = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
+  const maxSub    = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
 
   document.getElementById('totalSub').textContent      = total;
   document.getElementById('totalYear').textContent     = yearCost;
-  document.getElementById('mostExpensive').textContent = mostSub.price + ' ₽';
-  document.getElementById('mostExpName').textContent   = mostSub.name;
+  document.getElementById('mostExpensive').textContent = `${maxSub.price} ₽ ${maxSub.name}`;
 
-  // === ДОПОЛНИТЕЛЬНЫЕ: только 2 пункта ===
   extraStats();
 }
 
-// === ДОПОЛНИТЕЛЬНЫЕ: только 2 пункта ===
-function extraStats(){
-  const subs = getSubs();
-  if (!subs.length) return;
-
-  const totalYear = Math.round(subs.reduce((s,x)=>s+x.price*12,0));
-  const mostSub   = subs.reduce((max,x)=>x.price>max.price?x:max, subs[0]);
-
-  const block = document.querySelector('.stats-grid');
-  // **вставляем БЕЗ дубля «в год»**
-  block.insertAdjacentHTML('beforeend',`
-    <div class="stat"><div class="num">${totalYear}</div><div class="label">₽ в год</div></div>
-    <div class="stat"><div class="num">${mostSub.price} ₽</div><div class="label">дороже всего<br><small>${mostSub.name}</small></div></div>
-  `);
-}
-
-// === ДИАГРАММА PIE (круглая, без изменений) ===
+// === ДИАГРАММА PIE (без изменений) ===
 function drawChart(){
   const subs = getSubs();
   const ctx  = document.getElementById('chart').getContext('2d');
-  if (!subs.length){        // **не рисуем, если пусто**
+  if (!subs.length){
     document.getElementById('chart').style.display='none';
     return;
   }
