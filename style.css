@@ -34,22 +34,9 @@ td{border-bottom:1px solid rgba(255,255,255,.1)}
 .del{cursor:pointer;font-size:1.2rem;padding:.2rem .4rem;border-radius:4px;transition:background .2s}
 .del:hover{background:rgba(103,80,164,.2)}
 
-/* === СТАТИСТИКА === */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
+/* === СТАТИСТИКА (только 3 пункта) === */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
 .stat{text-align:center;background:rgba(255,255,255,.15);border-radius:12px;padding:.75rem;backdrop-filter:blur(5px)}
-.num{font-size:1.6rem;font-weight:500;color:#fff}
-.label{font-size:.75rem;opacity:.8}
-#chart{margin:0 auto;display:block}
-/* === ЦИФРЫ СТАТИСТИКИ – ЯРКО-ФИОЛЕТОВЫЕ === */
-.stat .num{
-  font-size:2rem;
-  font-weight:700;
-  color:#9a7bc6;           /* ярко-фиолетовый */
-  text-shadow:0 0 4px rgba(0,0,0,.2);
-}
-.stat .label{
-  font-size:.8rem;
-  color:#1d1b20;           /* светло-фиолетовый */
-  text-shadow:0 0 2px rgba(0,0,0,.2);
-}
-
+.num{font-size:2rem;font-weight:700;color:#9a7bc6;text-shadow:0 0 4px rgba(0,0,0,.2)}
+.label{font-size:.8rem;color:#1d1b20;text-shadow:0 0 2px rgba(0,0,0,.2)}
+canvas{margin:0 auto;display:block}
