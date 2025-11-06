@@ -1,4 +1,4 @@
-/* === ROOT & BASE === */
+/* === BASE === */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f3edf7;
@@ -10,52 +10,21 @@
   --font:'Roboto',sans-serif;
   font-size:14px;
 }
-@media (prefers-color-scheme:dark){
-  :root{ --bg:#141218; --surface:#211f26; --text:#e6e0e9; }
-}
-
-/* === ФОНОВОЕ ИЗОБРАЖЕНИЕ (Unsplash) === */
-body{
-  font-family:var(--font);
-  color:var(--text);
-  width:100vw;
-  overflow-x:hidden;
-  background:url('https://source.unsplash.com/1600x900/?abstract,gradient') center/cover fixed;
-  backdrop-filter:blur(4px);
-}
+body{font-family:var(--font);color:var(--text);width:100vw;overflow-x:hidden;background:url('https://source.unsplash.com/1600x900/?abstract,gradient') center/cover fixed}
 
 /* === ЗАГОЛОВОК === */
 header{padding:1rem;text-align:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px)}
 h1{font-size:1.4rem;font-weight:500;letter-spacing:.5px}
+h2{font-size:1.1rem;margin-bottom:.5rem;font-weight:500}
 
-/* === ФОРМА === */
-.form-card{
-  background:rgba(255,255,255,.25);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:1rem;
-  margin:.75rem;
-  backdrop-filter:blur(10px);
-}
+/* === ФОРМА И ТАБЛИЦА (как было) === */
+.form-card,.stats-card{background:rgba(255,255,255,.25);border-radius:var(--radius);box-shadow:var(--shadow);padding:1rem;margin:.75rem;backdrop-filter:blur(10px)}
 form{display:flex;flex-direction:column;gap:.6rem}
-input{padding:.75rem 1rem;border:none;border-radius:12px;font-size:1rem;background:rgba(255,255,255,.8);box-shadow:inset 0 2px 4px rgba(0,0,0,.05)}
-input::placeholder{color:#666}
+input,select{padding:.75rem 1rem;border:none;border-radius:12px;font-size:1rem;background:rgba(255,255,255,.8)}
 .date-line{display:flex;gap:.5rem;align-items:center}
-button{
-  flex:0 0 44px;
-  height:44px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--primary),#9a7bc6);
-  color:#fff;
-  border:none;
-  font-size:1.4rem;
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(103,80,164,.4);
-  transition:transform .2s,box-shadow .2s;
-}
+button{flex:0 0 44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#9a7bc6);color:#fff;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 10px rgba(103,80,164,.4);transition:transform .2s,box-shadow .2s}
 button:hover{transform:scale(1.08);box-shadow:0 6px 14px rgba(103,80,164,.5)}
 
-/* === ТАБЛИЦА === */
 table{width:100%;border-collapse:collapse;font-size:.95rem;margin:.75rem;background:rgba(255,255,255,.2);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
 thead{background:linear-gradient(135deg,var(--primary),#9a7bc6);color:#fff}
 th,td{padding:.6rem .75rem;text-align:left}
@@ -64,3 +33,10 @@ td{border-bottom:1px solid rgba(255,255,255,.1)}
 .status{font-size:1.2rem;padding:0 .2rem}
 .del{cursor:pointer;font-size:1.2rem;padding:.2rem .4rem;border-radius:4px;transition:background .2s}
 .del:hover{background:rgba(103,80,164,.2)}
+
+/* === СТАТИСТИКА === */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
+.stat{text-align:center;background:rgba(255,255,255,.15);border-radius:12px;padding:.75rem;backdrop-filter:blur(5px)}
+.num{font-size:1.6rem;font-weight:500;color:#fff}
+.label{font-size:.75rem;opacity:.8}
+#chart{margin:0 auto;display:block}
