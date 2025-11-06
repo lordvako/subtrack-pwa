@@ -31,12 +31,15 @@
     <tbody></tbody>
   </table>
 
-  <section class="stats">
-    <div>кол-во: <b id="totalSub">0</b></div>
-    <div>₽ в год: <b id="totalYear">0</b></div>
-    <div>дороже всего: <b id="mostExpensive">-</b></div>
+  <!-- центрированная статистика -->
+  <section class="stats-card">
+    <div class="stats-grid">
+      <div class="stat"><div class="num" id="totalSub">0</div><div class="label">кол-во</div></div>
+      <div class="stat"><div class="num" id="totalYear">0</div><div class="label">₽ в год</div></div>
+      <div class="stat"><div class="num" id="mostExpensive">-</div><div class="label">дороже всего</div></div>
+    </div>
+    <canvas id="chart" width="280" height="280"></canvas>
   </section>
-  <canvas id="chart" width="280" height="280"></canvas>
 
   <script src="app.js"></script>
 </body>
