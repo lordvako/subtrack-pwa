@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <title>SubTrack</title>
   <link rel="stylesheet" href="style.css">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-  <h1>Мои подписки</h1>
+  <!-- видимая красная кнопка-заголовок (WebView не съест) -->
+  <button class="title-btn" disabled>МОИ ПОДПИСКИ</button>
 
   <form id="addForm">
     <input name="name" placeholder="Название" required>
@@ -31,12 +32,12 @@
     <tbody></tbody>
   </table>
 
-  <!-- центрированная статистика -->
+  <!-- центрированная статистика с яркими цифрами -->
   <section class="stats-card">
-    <div class="stats-grid">
-      <div class="stat"><div class="num" id="totalSub">0</div><div class="label">кол-во</div></div>
-      <div class="stat"><div class="num" id="totalYear">0</div><div class="label">₽ в год</div></div>
-      <div class="stat"><div class="num" id="mostExpensive">-</div><div class="label">дороже всего</div></div>
+    <div class="stats">
+      <span class="grad">кол-во: <b id="totalSub" class="grad">0</b></span>
+      <span class="grad">₽ в год: <b id="totalYear" class="grad">0</b></span>
+      <span class="grad">дороже всего: <b id="mostExpensive" class="grad">-</b></span>
     </div>
     <canvas id="chart" width="280" height="280"></canvas>
   </section>
@@ -44,4 +45,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
