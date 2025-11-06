@@ -4,8 +4,8 @@
   --bg:#f5f2fa;
   --surface:#ffffffcc;
   --primary:#6750a4;
-  --accent:#ff4d6d;          /* ярко-красный акцент */
-  --gold:#ffb703;           /* золотой для бликов */
+  --accent:#ff4d6d;
+  --gold:#ffb703;
   --text:#1d1b20;
   --radius:16px;
   --shadow:0 4px 12px rgba(0,0,0,.08);
@@ -104,7 +104,10 @@ button:hover{
 
 /* === ТАБЛИЦА === */
 table{
+  display:block;                /* разрешаем скролл */
   width:100%;
+  overflow-x:auto;
+  white-space:nowrap;
   border-collapse:collapse;
   font-size:.95rem;
   margin:.75rem;
@@ -144,10 +147,10 @@ tbody tr:hover{
   text-shadow:0 0 6px var(--gold);
 }
 
-/* === СТАТИСТИКА === */
+/* === СТАТИСТИКА (3 колонки) === */
 .stats-grid{
   display:grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns:repeat(3,1fr);   /* ← 3 колонки, как было */
   gap:1rem;
   margin-bottom:1rem;
 }
@@ -169,45 +172,9 @@ tbody tr:hover{
 .label{font-size:.8rem;color:var(--text);text-shadow:0 0 2px rgba(0,0,0,.2)}
 canvas{margin:0 auto;display:block}
 
-/* === МОБИЛЬНАЯ АДАПТИВНОСТЬ === */
-@media (max-width: 600px) {
-  /* убираем горизонтальный скролл всей страницы */
-  body {
-    overflow-x: hidden;
-  }
-
-  /* оборачиваем таблицу в «резиновый» контейнер */
-  table {
-    display: block;
-    width: 100%;
-    overflow-x: auto;   /* горизонтальный скролл внутри таблицы */
-    white-space: nowrap;
-    margin: 0.75rem 0;
-    border-radius: var(--radius);
-  }
-
-  /* ячейки становятся компактнее */
-  th, td {
-    padding: 0.4rem 0.5rem;
-    font-size: 0.85rem;
-  }
-
-  /* корзина — фиксированная ширина, не «уезжает» */
-  .del {
-    width: 32px;
-    text-align: center;
-    padding: 0.2rem;
-  }
-
-  /* заголовок-«кнопка» чуть меньше */
-  h1 {
-    font-size: 1.25rem;
-    padding: 0.5rem 1.2rem;
-  }
-
-  /* статистика в 2 колонки вместо 3 */
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+/* === АДАПТИВ === */
+@media (max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr;} /* на телефоне 2 в ряд */
+  table{font-size:.85rem;}
+  th,td{padding:.4rem .5rem;}
 }
-
