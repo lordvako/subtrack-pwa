@@ -9,12 +9,12 @@ function addMonths(date, n){
   return d.toISOString().slice(0,10);
 }
 
-// === рендер с плавным появлением ===
+// === рендер таблицы ===
 function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
-      const next = addMonths(s.nextPay,1);
+      const next = addMonths(s.nextPay,+s.period);
       const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
       const status = daysLeft < 0 ? '❌' : '✅';
       return `<tr style="animation:fadeIn .4s">
@@ -27,6 +27,8 @@ function render(){
               </tr>`;
     }).join('');
   list.querySelector('tbody').innerHTML = rows || '<tr><td colspan="6">Подписок пока нет</td></tr>';
+  updateStats();
+  drawChart();
 }
 
 // === удаление ===
@@ -37,12 +39,50 @@ function del(idx){
   render();
 }
 
+// === СТАТИСТИКА ===
+function updateStats(){
+  const subs = getSubs();
+  const total   = subs.length;
+  const avgPrice= total ? Math.round(subs.reduce((s,x)=>s+x.price,0)/total) : 0;
+  const yearCost= subs.reduce((s,x)=>s+x.price*(12/x.period),0);
+  const avgDays = total ? Math.round(subs.reduce((s,x)=>{
+    const next = addMonths(x.nextPay,+x.period);
+    return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
+  },0)/total) : 0;
+
+  document.getElementById('totalSub').textContent  = total;
+  document.getElementById('avgPrice').textContent  = avgPrice;
+  document.getElementById('totalYear').textContent = Math.round(yearCost);
+  document.getElementById('avgDays').textContent   = avgDays;
+}
+
+// === ДИАГРАММА PIE (цены) ===
+function drawChart(){
+  const subs = getSubs();
+  const ctx  = document.getElementById('chart').getContext('2d');
+  const data = subs.map(s=>s.price);
+  const labels = subs.map(s=>s.name);
+
+  new Chart(ctx,{
+    type:'pie',
+    data:{
+      labels:labels,
+      datasets:[{
+        data:data,
+        backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
+        borderWidth:0
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
+  });
+}
+
 // === добавление ===
 addForm.onsubmit = e =>{
   e.preventDefault();
-  const {name,price,nextPay} = addForm;
+  const {name,price,period,nextPay} = addForm;
   const subs = getSubs();
-  subs.push({name:name.value, price:price.value, nextPay:nextPay.value});
+  subs.push({name:name.value, price:price.value, period:period.value, nextPay:nextPay.value});
   setSubs(subs);
   addForm.reset();
   render();
