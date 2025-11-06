@@ -149,3 +149,5 @@ function handleSwipe(el){
     render();               // перерисуем без удалённой строки
   }, 300);
 }
+/* ===== свайп-удаление ===== */
+tr{transition:transform .3s}
