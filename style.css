@@ -40,3 +40,15 @@ td{border-bottom:1px solid rgba(255,255,255,.1)}
 .num{font-size:1.6rem;font-weight:500;color:#fff}
 .label{font-size:.75rem;opacity:.8}
 #chart{margin:0 auto;display:block}
+/* === ЦИФРЫ СТАТИСТИКИ – ЯРКО-ФИОЛЕТОВЫЕ === */
+.stat .num{
+  font-size:2rem;
+  font-weight:700;
+  color:#9a7bc6;           /* ярко-фиолетовый */
+  text-shadow:0 0 4px rgba(0,0,0,.2);
+}
+.stat .label{
+  font-size:.8rem;
+  color:#e6d7f4;           /* светло-фиолетовый */
+  text-shadow:0 0 2px rgba(0,0,0,.2);
+}
