@@ -1,29 +1,23 @@
 // === localStorage ===
-function getSubs(){
-  try{ return JSON.parse(localStorage.getItem('subs')||'[]'); }
-  catch{ return []; }
-}
-function setSubs(list){
-  try{ localStorage.setItem('subs',JSON.stringify(list)); }
-  catch{ console.warn('localStorage недоступен'); }
-}
+function getSubs(){ return JSON.parse(localStorage.getItem('subs')||'[]'); }
+function setSubs(list){ localStorage.setItem('subs',JSON.stringify(list)); }
 
-// === +1 месяц (как было) ===
+// === +1 месяц ===
 function addMonths(date, n){
   const d = new Date(date);
   d.setMonth(d.getMonth() + n);
   return d.toISOString().slice(0,10);
 }
 
-// === рендер таблицы ===
+// === рендер с плавным появлением ===
 function render(){
   const rows = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay))
     .map((s,idx)=>{
-      const next = addMonths(s.nextPay,1);           // всегда +1 месяц
+      const next = addMonths(s.nextPay,1);
       const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
       const status = daysLeft < 0 ? '❌' : '✅';
-      return `<tr>
+      return `<tr style="animation:fadeIn .4s">
                 <td>${s.name}</td>
                 <td>${s.price} ₽</td>
                 <td>${next}</td>
@@ -46,19 +40,10 @@ function del(idx){
 // === добавление ===
 addForm.onsubmit = e =>{
   e.preventDefault();
-  const {name,price,nextPay} = addForm;                  // **без period**
-  if(!name.value || !price.value || !nextPay.value){
-    alert('Заполните все поля!');
-    return;
-  }
+  const {name,price,nextPay} = addForm;
   const subs = getSubs();
-  subs.push({name:name.value, price:price.value, nextPay:nextPay.value}); // **без period**
+  subs.push({name:name.value, price:price.value, nextPay:nextPay.value});
   setSubs(subs);
-
-  // === визуальное подтверждение ===
-  alert('Подписка добавлена!');
-  console.log('Добавлено:', name.value, price.value, nextPay.value);
-
   addForm.reset();
   render();
 };
