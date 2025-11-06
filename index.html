@@ -7,10 +7,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#6750a4">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400 ;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
   <header><h1>Мои подписки</h1></header>
 
@@ -33,22 +34,40 @@
     </section>
 
     <table id="list">
-      <thead><tr><th>Название<th>Сумма<th>Дата<th>До конца<th>Статус<th></tr></thead>
+      <thead>
+        <tr>
+          <th>Название<th>Сумма<th>Дата<th>До конца<th>Статус<th>
+        </tr>
+      </thead>
       <tbody></tbody>
     </table>
 
-    <!-- СТАТИСТИКА (только 3 пункта) -->
+    <!-- СТАТИСТИКА (4 пункта) -->
     <section class="stats-card">
       <h2>Статистика</h2>
       <div class="stats-grid">
-        <div class="stat"><div class="num" id="totalSub">0</div><div class="label">кол-во</div></div>
-        <div class="stat"><div class="num" id="totalYear">0</div><div class="label">₽ в год</div></div>
-        <div class="stat"><div class="num" id="mostExpensive">0</div><div class="label">дороже всего</div></div>
+        <div class="stat">
+          <div class="num" id="totalSub">0</div>
+          <div class="label">кол-во</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="monthCost">0</div>
+          <div class="label">₽ в месяц</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="totalYear">0</div>
+          <div class="label">₽ в год</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="mostExpensive">-</div>
+          <div class="label">дороже всего</div>
+        </div>
       </div>
       <canvas id="chart" width="280" height="280"></canvas>
     </section>
   </main>
 
+  <!-- СКРИПТЫ ПОДКЛЮЧАЕМ ПОСЛЕ ВСЕХ ЭЛЕМЕНТОВ -->
   <script src="app.js"></script>
   <script>navigator.serviceWorker?.register('sw.js')</script>
 </body>
