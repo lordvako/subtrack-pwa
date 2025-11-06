@@ -110,3 +110,22 @@ canvas{margin:0 auto;display:block}
   /* мелкие ячейки – больше помещается */
   th,td{padding:.4rem;font-size:.8rem}
 }
+/* ===== Android: компактная таблица ===== */
+@media (max-width: 600px) {
+  html,body{overflow-x:hidden}                    /* системный скролл убираем */
+  .table-wrapper{width:100vw;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:320px}                          /* можно чуть уже */
+
+  /* компактные ячейки – больше места */
+  th,td{padding:.3rem .25rem;font-size:.75rem}
+
+  /* убираем лишнее слово «₽» – оставляем только цифру */
+  td:nth-child(2){white-space:nowrap}
+
+  /* колонка «До конца» → просто цифра + иконка */
+  td:nth-child(4){font-size:.7rem}
+  td:nth-child(5){padding:0 .2rem;font-size:1rem} /* статус/корзина */
+
+  /* корзина поменьше */
+  .del{padding:0 .2rem;font-size:1rem}
+}
