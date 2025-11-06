@@ -111,11 +111,12 @@ canvas{margin:0 auto;display:block}
   th,td{padding:.4rem;font-size:.8rem}
 }
 /* ===== Android: компактная таблица ===== */
+/* ===== компактная таблица ===== */
 @media (max-width: 600px) {
-  html,body{overflow-x:hidden}                    /* системный скролл убираем */
-  .table-wrapper{width:100vw;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{min-width:320px}                          /* можно чуть уже */
-
+  th,td{padding:.25rem .2rem;font-size:.7rem}   /* ещё меньше */
+  td:nth-child(2){white-space:nowrap}          /* цена в одну строку */
+  td:nth-child(4){font-size:.6rem}             /* «До конца» поменьше */
+}
   /* компактные ячейки – больше места */
   th,td{padding:.3rem .25rem;font-size:.75rem}
 
@@ -142,3 +143,4 @@ canvas{margin:0 auto;display:block}
   td:nth-child(5){padding:0 .15rem;font-size:1rem} /* иконка статуса */
   .del{padding:0 .15rem;font-size:.9rem}       /* корзина поменьше */
 }
+
