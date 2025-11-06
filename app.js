@@ -45,7 +45,7 @@ function del(idx){
   render();
 }
 
-// === СТАТИСТИКА (без дублей, цифры белые) ===
+// === СТАТИСТИКА (цифры фиолетовые) ===
 function updateStats(){
   const subs = getSubs();
   if (!subs.length){
