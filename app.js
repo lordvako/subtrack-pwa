@@ -15,38 +15,75 @@ function addMonths(date, n){
   return d.toISOString().slice(0,10);
 }
 
-// === рендер таблицы и всего остального ===
+// === рендер таблицы ===
 function render(){
   const subs = getSubs()
     .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay));
 
-  const rows = subs.map((s,idx)=>{
-  const next     = addMonths(s.nextPay, s.period);
-  const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
-  const status   = daysLeft < 0 ? '❌' : '✅';
-  return `<tr data-idx="${idx}" style="animation:fadeIn .4s">
-            <td>${s.name}</td>
-            <td>${s.price} ₽</td>
-            <td>${next}</td>
-            <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
-            <td class="status">${status}</td>
-          </tr>`;          // нет колонки корзины
-}).join('');
+  const rows = subs
+    .map((s,idx)=>{
+      const next     = addMonths(s.nextPay,1);
+      const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
+      const status   = daysLeft < 0 ? '❌' : '✅';
+      return `<tr data-idx="${idx}" style="animation:fadeIn .4s">
+                <td>${s.name}</td>
+                <td>${s.price} ₽</td>
+                <td>${next}</td>
+                <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
+                <td class="status">${status}</td>
+              </tr>`;          // нет колонки корзины
+    }).join('');
 
   const tbody = document.querySelector('#list tbody');
-  if(tbody) tbody.innerHTML = rows || '<tr><td colspan="6">Подписок пока нет</td></tr>';
+  if(tbody) tbody.innerHTML = rows || '<tr><td colspan="5">Подписок пока нет</td></tr>';
 
   updateStats();
   drawChart();
 }
 
-// === удаление ===
-function del(idx){
-  const subs = getSubs();
-  subs.splice(idx,1);
-  setSubs(subs);
-  render();
+// === удаление по свайпу =====
+let touchStartX = 0;
+let touchEndX   = 0;
+
+document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive:true});
+document.addEventListener('touchend',   e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe(e.target);
+}, {passive:true});
+
+function handleSwipe(el){
+  const row = el.closest('tr');
+  if(!row) return;
+  const deltaX = touchStartX - touchEndX;
+  if(deltaX < 80) return;                      // свайп влево > 80px
+
+  const idx = row.dataset.idx;
+  if(idx === undefined) return;
+
+  // анимация «уезжает влево»
+  row.style.transition = 'transform .3s';
+  row.style.transform  = 'translateX(-110%)';
+
+  setTimeout(() => {
+    const subs = getSubs();
+    subs.splice(idx, 1);
+    setSubs(subs);
+    render();               // перерисуем без удалённой строки
+  }, 300);
 }
+
+// === удаление по клику на строку (fallback) === */
+document.addEventListener('click', e => {
+  const row = e.target.closest('tr');
+  if(!row || !row.dataset.idx) return;
+  if(confirm('Удалить подписку?')){
+    const idx = row.dataset.idx;
+    const subs = getSubs();
+    subs.splice(idx, 1);
+    setSubs(subs);
+    render();
+  }
+});
 
 // === статистика ===
 function updateStats(){
@@ -68,35 +105,28 @@ function updateStats(){
     });
 }
 
-// === круговая диаграмма ===
+// === диаграмма ===
 function drawChart(){
   const canvas = document.getElementById('chart');
-  if(!canvas) return;                       // защита
+  if(!canvas) return;
   const subs = getSubs();
-  if(!subs.length){                         // если пусто – прячем canvas
-    canvas.style.display = 'none';
-    return;
-  }
-  canvas.style.display = 'block';
-  const ctx = canvas.getContext('2d');
-
-  if(window.myPie) window.myPie.destroy();  // уничтожаем старую диаграмму
-
-  window.myPie = new Chart(ctx,{
+  if(!subs.length){canvas.style.display='none';return;}
+  canvas.style.display='block';
+  const ctx=canvas.getContext('2d');
+  if(window.myPie)window.myPie.destroy();
+  window.myPie=new Chart(ctx,{
     type:'pie',
     data:{
-      labels: subs.map(s=>s.name),
-      datasets:[{
-        data: subs.map(s=> +s.price),
-        backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
-        borderWidth:0
-      }]
+      labels:subs.map(s=>s.name),
+      datasets:[{data:subs.map(s=>+s.price),
+                 backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
+                 borderWidth:0}]
     },
-    options:{ responsive:true, plugins:{ legend:{ display:false } }, cutout:'60%' }
+    options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
   });
 }
 
-// === добавление новой подписки ===
+// === добавление подписки ===
 document.addEventListener('DOMContentLoaded',()=>{
   const form = document.getElementById('addForm');
   if(form){
@@ -116,38 +146,5 @@ document.addEventListener('DOMContentLoaded',()=>{
       render();
     });
   }
-  render();   // первичный рендер
+  render();
 });
-
-// ===== SWIPE-УДАЛЕНИЕ =====
-let touchStartX = 0;
-let touchEndX   = 0;
-
-document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive:true});
-document.addEventListener('touchend',   e => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe(e.target);
-}, {passive:true});
-
-function handleSwipe(el){
-  const row = el.closest('tr');
-  if(!row) return;
-  const deltaX = touchStartX - touchEndX;
-  if(deltaX < 80) return;                      // свайп влево > 80px
-
-  const idx = row.dataset.idx;                 // индекс строки
-  if(idx === undefined) return;
-
-  // анимация «уезжает влево»
-  row.style.transition = 'transform .3s';
-  row.style.transform  = 'translateX(-110%)';
-
-  setTimeout(() => {
-    const subs = getSubs();
-    subs.splice(idx, 1);
-    setSubs(subs);
-    render();               // перерисуем без удалённой строки
-  }, 300);
-}
-/* ===== свайп-удаление ===== */
-tr{transition:transform .3s}
