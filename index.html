@@ -24,20 +24,20 @@
     <button type="submit">+</button>
   </form>
 
-  <!-- обёртка даёт полную ширину + скролл внутри -->
   <div class="table-wrapper">
-   <table id="list">
-  <thead>
-    <tr><th>Название<th>Сумма<th>Дата<th>До конца<th></tr>   <!-- нет «Статус» и «Корзина» -->
-  </thead>
-  <tbody></tbody>
-</table>
+    <table id="list">
+      <thead>
+        <tr><th>Название<th>Сумма<th>Дата<th>До конца<th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-  <!-- центральная карточка статистики (3 пункта) -->
+  <!-- строго 4 ячейки статистики -->
   <section class="stats-card">
     <div class="stats-grid">
       <div class="stat"><div class="num" id="totalSub">0</div><div class="label">кол-во</div></div>
+      <div class="stat"><div class="num" id="avgPrice">0</div><div class="label">средняя цена</div></div>
       <div class="stat"><div class="num" id="totalYear">0</div><div class="label">₽ в год</div></div>
       <div class="stat"><div class="num" id="mostExpensive">-</div><div class="label">дороже всего</div></div>
     </div>
@@ -47,5 +47,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
-
