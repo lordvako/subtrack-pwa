@@ -41,7 +41,7 @@ function render(){
   drawChart();
 }
 
-// ===== свайп-удаление =====
+// === удаление по свайпу =====
 let touchStartX = 0;
 let touchEndX   = 0;
 
@@ -72,6 +72,19 @@ function handleSwipe(el){
   }, 300);
 }
 
+// === удаление по клику на строку (fallback) === */
+document.addEventListener('click', e => {
+  const row = e.target.closest('tr');
+  if(!row || !row.dataset.idx) return;
+  if(confirm('Удалить подписку?')){
+    const idx = row.dataset.idx;
+    const subs = getSubs();
+    subs.splice(idx, 1);
+    setSubs(subs);
+    render();
+  }
+});
+
 // === статистика (4 показателя) ==========
 function updateStats(){
   const subs = getSubs();
@@ -83,19 +96,25 @@ function updateStats(){
                      return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
                    },0)/total) : 0;
 
-  /* только ИМЯ самой дорогой подписки */
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
-  /* строго по существующим id – не создаём новых элементов */
-  document.getElementById('totalSub').textContent   = total;
-  document.getElementById('avgPrice').textContent   = avgPrice;
-  document.getElementById('totalYear').textContent  = yearCost;
-  document.getElementById('avgDays').textContent    = avgDays;
-  document.getElementById('mostExpensive').textContent = mostExpName;
+  /* жёсткий фоллбэк: если элемента нет – создаём */
+  ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
+    .forEach(id=>{
+      let el=document.getElementById(id);
+      if(!el){
+        el=document.createElement('div');
+        el.id=id;
+        document.querySelector('.stats-grid').appendChild(el);
+      }
+      el.textContent=
+        id==='mostExpensive'?mostExpName
+                           :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
+    });
 }
 
-// === диаграмма (только если есть данные) ==========
+// === диаграмма ===
 function drawChart(){
   const canvas = document.getElementById('chart');
   if(!canvas) return;
@@ -118,18 +137,21 @@ function drawChart(){
 
 // === добавление подписки ===
 document.addEventListener('DOMContentLoaded',()=>{
-  const form=document.getElementById('addForm');
+  const form = document.getElementById('addForm');
   if(form){
-    form.nextPay.value=new Date().toISOString().slice(0,10);
+    form.nextPay.value = new Date().toISOString().slice(0,10);
     form.addEventListener('submit',e=>{
       e.preventDefault();
-      const {name,price,nextPay}=form;
-      if(!name.value||!price.value||!nextPay.value){alert('Заполните все поля!');return;}
-      const subs=getSubs();
-      subs.push({name:name.value.trim(),price:+price.value,nextPay:nextPay.value});
+      const {name,price,nextPay} = form;
+      if(!name.value || !price.value || !nextPay.value){
+        alert('Заполните все поля!');
+        return;
+      }
+      const subs = getSubs();
+      subs.push({name:name.value.trim(), price:+price.value, nextPay:nextPay.value});
       setSubs(subs);
       form.reset();
-      form.nextPay.value=new Date().toISOString().slice(0,10);
+      form.nextPay.value = new Date().toISOString().slice(0,10);
       render();
     });
   }
