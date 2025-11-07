@@ -99,20 +99,14 @@ function updateStats(){
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
-  /* жёсткий фоллбэк: если элемента нет – создаём */
-  ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
-    .forEach(id=>{
-      let el=document.getElementById(id);
-      if(!el){
-        el=document.createElement('div');
-        el.id=id;
-        document.querySelector('.stats-grid').appendChild(el);
-      }
-      el.textContent=
-        id==='mostExpensive'?mostExpName
-                           :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
-    });
+  /* **жёстко» по существующим id – не создаём новых элементов */
+  document.getElementById('totalSub').textContent   = total;
+  document.getElementById('avgPrice').textContent   = avgPrice;
+  document.getElementById('totalYear').textContent  = yearCost;
+  document.getElementById('avgDays').textContent    = avgDays;
+  document.getElementById('mostExpensive').textContent = mostExpName;
 }
+
 
 // === диаграмма ===
 function drawChart(){
@@ -157,3 +151,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   render();
 });
+
