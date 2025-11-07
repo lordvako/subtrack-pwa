@@ -1,4 +1,4 @@
-/* ========== ЖИВОЙ ГРАДИЕНТ-ФОН ========== */
+/* ========== ЖИВОЙ ФОН ========== */
 *{
   box-sizing:border-box;
   margin:0;
@@ -17,7 +17,7 @@ body{
   100%{background-position:0% 50%;}
 }
 
-/* ========== СИЯЮЩАЯ КНОПКА-ЗАГОЛОВОК ========== */
+/* ========== СИЯЮЩИЙ ЗАГОЛОВОК ========== */
 h1{
   display:block;
   width:fit-content;
@@ -72,10 +72,9 @@ button{
 }
 button:hover{transform:scale(1.15);box-shadow:0 6px 18px rgba(255,77,109,.5),0 0 18px rgba(255,77,109,.45);animation:none;}
 
-/* ========== ТАБЛИЦА С АНИМАЦИЕЙ ========== */
+/* ========== ТАБЛИЦА БЕЗ ГОРИЗОНТАЛЬНОГО СКРОЛЛА ========== */
 .table-wrapper{
   width:100%;
-  overflow-x:auto;
   background:rgba(255,255,255,.25);
   border-radius:16px;
   box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.4);
@@ -84,7 +83,6 @@ button:hover{transform:scale(1.15);box-shadow:0 6px 18px rgba(255,77,109,.5),0 0
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:320px;
 }
 th,td{padding:.4rem;font-size:.85rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.2);}
 th{background:linear-gradient(135deg,rgba(103,80,164,.8),rgba(154,123,198,.8));color:#fff;}
@@ -92,7 +90,7 @@ tr{transition:background .25s,transform .2s;}
 tr:hover{background:rgba(255,255,255,.15);transform:scale(1.01);}
 td.status{font-size:1.2rem;padding:0 .2rem;}
 
-/* ========== ЦЕНТРАЛЬНАЯ СТАТИСТИКА С ЯРКИМ ГРАДИЕНТОМ ========== */
+/* ========== ЦЕНТРАЛЬНАЯ СТАТИСТИКА С ЯРКИМИ ЦИФРАМИ ========== */
 .stats-card{
   max-width:420px;
   margin:1.5rem auto;
@@ -110,8 +108,11 @@ td.status{font-size:1.2rem;padding:0 .2rem;}
 }
 .stat{text-align:center;transition:transform .25s;}
 .stat:hover{transform:scale(1.05);}
-.num{font-size:2rem;font-weight:700;
-  background:linear-gradient(135deg,#6750a4,#9a7bc6,#c9b6e4,#e6d7f4,#f3edf7);
+.num{
+  font-size:2rem;
+  font-weight:700;
+  /* ЯРКИЙ НАСЫЩЕННЫЙ ГРАДИЕНТ – без прозрачности по краям */
+  background:linear-gradient(135deg,#6750a4 20%,#9a7bc6 40%,#c9b6e4 60%,#e6d7f4 80%,#f3edf7 100%);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   text-shadow:0 0 4px rgba(0,0,0,.1);
