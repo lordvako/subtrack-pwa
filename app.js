@@ -71,25 +71,17 @@ function handleSwipe(el){
   }, 300);
 }
 
-// === статистика (4 показателя) ==========
+// === статистика (3 показателя) ==========
 function updateStats(){
   const subs = getSubs();
   const total    = subs.length;
-  const avgPrice = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price),0)/total) : 0;
   const yearCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*12,0)) : 0;
-  const avgDays  = total ? Math.round(subs.reduce((s,x)=>{
-                     const next = addMonths(x.nextPay,1);
-                     return s+Math.max(0,Math.ceil((new Date(next)-new Date())/86400000));
-                   },0)/total) : 0;
-
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
   /* строго по существующим id – не создаём новых элементов */
   document.getElementById('totalSub').textContent   = total;
-  document.getElementById('avgPrice').textContent   = avgPrice;
   document.getElementById('totalYear').textContent  = yearCost;
-  document.getElementById('avgDays').textContent    = avgDays;
   document.getElementById('mostExpensive').textContent = mostExpName;
 }
 
@@ -127,7 +119,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       subs.push({name:name.value.trim(),price:+price.value,nextPay:nextPay.value});
       setSubs(subs);
       form.reset();
-    form.nextPay.value=new Date().toISOString().slice(0,10);
+      form.nextPay.value=new Date().toISOString().slice(0,10);
       render();
     });
   }
