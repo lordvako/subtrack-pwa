@@ -31,7 +31,7 @@ function render(){
                 <td>${next}</td>
                 <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
                 <td class="status">${status}</td>
-              </tr>`;          // нет колонки корзины
+              </tr>`;
     }).join('');
 
   const tbody = document.querySelector('#list tbody');
@@ -41,7 +41,7 @@ function render(){
   drawChart();
 }
 
-// === удаление по свайпу =====
+// ===== свайп-удаление =====
 let touchStartX = 0;
 let touchEndX   = 0;
 
@@ -55,12 +55,11 @@ function handleSwipe(el){
   const row = el.closest('tr');
   if(!row) return;
   const deltaX = touchStartX - touchEndX;
-  if(deltaX < 80) return;                      // свайп влево > 80px
+  if(deltaX < 80) return;
 
   const idx = row.dataset.idx;
   if(idx === undefined) return;
 
-  // анимация «уезжает влево»
   row.style.transition = 'transform .3s';
   row.style.transform  = 'translateX(-110%)';
 
@@ -68,22 +67,9 @@ function handleSwipe(el){
     const subs = getSubs();
     subs.splice(idx, 1);
     setSubs(subs);
-    render();               // перерисуем без удалённой строки
+    render();
   }, 300);
 }
-
-// === удаление по клику на строку (fallback) === */
-document.addEventListener('click', e => {
-  const row = e.target.closest('tr');
-  if(!row || !row.dataset.idx) return;
-  if(confirm('Удалить подписку?')){
-    const idx = row.dataset.idx;
-    const subs = getSubs();
-    subs.splice(idx, 1);
-    setSubs(subs);
-    render();
-  }
-});
 
 // === статистика (4 показателя) ==========
 function updateStats(){
@@ -99,22 +85,15 @@ function updateStats(){
   let mostExpName = '-';
   if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
 
-  /* жёсткий фоллбэк: если элемента нет – создаём */
-  ['totalSub','avgPrice','totalYear','avgDays','mostExpensive']
-    .forEach(id=>{
-      let el=document.getElementById(id);
-      if(!el){
-        el=document.createElement('div');
-        el.id=id;
-        document.querySelector('.stats-grid').appendChild(el);
-      }
-      el.textContent=
-        id==='mostExpensive'?mostExpName
-                           :{totalSub:total,avgPrice,totalYear:yearCost,avgDays}[id];
-    });
+  /* строго по существующим id – не создаём новых элементов */
+  document.getElementById('totalSub').textContent   = total;
+  document.getElementById('avgPrice').textContent   = avgPrice;
+  document.getElementById('totalYear').textContent  = yearCost;
+  document.getElementById('avgDays').textContent    = avgDays;
+  document.getElementById('mostExpensive').textContent = mostExpName;
 }
 
-// === диаграмма ===
+// === диаграмма (только если есть данные) ==========
 function drawChart(){
   const canvas = document.getElementById('chart');
   if(!canvas) return;
@@ -137,21 +116,18 @@ function drawChart(){
 
 // === добавление подписки ===
 document.addEventListener('DOMContentLoaded',()=>{
-  const form = document.getElementById('addForm');
+  const form=document.getElementById('addForm');
   if(form){
-    form.nextPay.value = new Date().toISOString().slice(0,10);
+    form.nextPay.value=new Date().toISOString().slice(0,10);
     form.addEventListener('submit',e=>{
       e.preventDefault();
-      const {name,price,nextPay} = form;
-      if(!name.value || !price.value || !nextPay.value){
-        alert('Заполните все поля!');
-        return;
-      }
-      const subs = getSubs();
-      subs.push({name:name.value.trim(), price:+price.value, nextPay:nextPay.value});
+      const {name,price,nextPay}=form;
+      if(!name.value||!price.value||!nextPay.value){alert('Заполните все поля!');return;}
+      const subs=getSubs();
+      subs.push({name:name.value.trim(),price:+price.value,nextPay:nextPay.value});
       setSubs(subs);
       form.reset();
-      form.nextPay.value = new Date().toISOString().slice(0,10);
+    form.nextPay.value=new Date().toISOString().slice(0,10);
       render();
     });
   }
