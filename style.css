@@ -1,12 +1,27 @@
-/* ========== БАЗА ========== */
-*{box-sizing:border-box;margin:0;padding:0;font-family:Roboto,sans-serif}
-body{padding:1rem;background:linear-gradient(135deg,#f5f2fa 0%,#e6dff3 100%) fixed}
+/* ========== ЖИВОЙ ГРАДИЕНТ-ФОН ========== */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Roboto',sans-serif;
+}
+body{
+  padding:1rem;
+  background:linear-gradient(-45deg,#ff4d6d,#9a7bc6,#6750a4,#c9b6e4);
+  background-size:400% 400%;
+  animation:bgMove 15s ease infinite;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
 
-/* ========== КРАСИВЫЙ ЗАГОЛОВОК ========== */
+/* ========== СИЯЮЩАЯ КНОПКА-ЗАГОЛОВОК ========== */
 h1{
-  text-align:center;
-  margin:0 auto 1.2rem;
+  display:block;
   width:fit-content;
+  margin:0 auto 1.2rem;
   padding:.6rem 1.8rem;
   font-size:1.5rem;
   font-weight:700;
@@ -17,58 +32,73 @@ h1{
   box-shadow:0 4px 12px rgba(0,0,0,.15),0 0 12px rgba(255,77,109,.35);
   cursor:default;
   transition:transform .25s,box-shadow .25s;
+  animation:pulse 2s infinite;
 }
 h1:hover{
   transform:translateY(-2px);
   box-shadow:0 6px 16px rgba(255,77,109,.45),0 0 14px rgba(255,77,109,.45);
 }
-
-/* ========== ФОРМА ========== */
-form{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
-input,select{padding:.5rem;border:1px solid #ccc;border-radius:8px;background:#fff}
-
-/* ========== ПУЛЬСИРУЮЩИЙ ПЛЮС ========== */
-button{
-  width:44px;height:44px;border-radius:50%;
-  background:linear-gradient(135deg,#ff4d6d,#ff758f);
-  color:#fff;border:none;font-size:1.6rem;line-height:1;
-  box-shadow:0 4px 10px rgba(255,77,109,.4),0 0 12px rgba(255,77,109,.35);
-  cursor:pointer;transition:transform .25s,box-shadow .25s;
-  animation:pulse 2s infinite;
-}
-button:hover{transform:scale(1.12);box-shadow:0 6px 14px rgba(255,77,109,.5),0 0 16px rgba(255,77,109,.45);animation:none;}
-
 @keyframes pulse{
   0%{box-shadow:0 0 0 0 rgba(255,77,109,.4);}
   70%{box-shadow:0 0 0 10px rgba(255,77,109,0);}
   100%{box-shadow:0 0 0 0 rgba(255,77,109,0);}
 }
 
-/* ========== ТАБЛИЦА: на всю ширину + скролл внутри ========== */
+/* ========== ФОРМА С ПОДСВЕТКОЙ ========== */
+form{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+input,select{
+  padding:.5rem;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:12px;
+  font-size:1rem;
+  background:rgba(255,255,255,.25);
+  color:#fff;
+  transition:background .3s,box-shadow .3s;
+}
+input:focus,select:focus{
+  outline:none;
+  background:rgba(255,255,255,.4);
+  box-shadow:0 0 12px rgba(255,77,109,.4);
+}
+
+/* ========== СИЯЮЩИЙ ПЛЮС ========== */
+button{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,#ff4d6d,#ff758f);
+  color:#fff;border:none;font-size:1.6rem;line-height:1;
+  box-shadow:0 4px 10px rgba(255,77,109,.4),0 0 12px rgba(255,77,109,.35);
+  cursor:pointer;transition:transform .25s,box-shadow .25s;
+  animation:pulse 2s infinite;
+}
+button:hover{transform:scale(1.15);box-shadow:0 6px 18px rgba(255,77,109,.5),0 0 18px rgba(255,77,109,.45);animation:none;}
+
+/* ========== ТАБЛИЦА С АНИМАЦИЕЙ ========== */
 .table-wrapper{
-  width:100%;               /* растягиваемся на всю ширину контейнера */
-  overflow-x:auto;          /* скролл по горизонтали */
-  background:#fff;
-  border-radius:8px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  width:100%;
+  overflow-x:auto;
+  background:rgba(255,255,255,.25);
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.4);
+  backdrop-filter:blur(10px);
 }
 table{
-  width:100%;               /* внутри скролла – полная ширина */
+  width:100%;
   border-collapse:collapse;
-  min-width:360px;          /* минимум 360px – не сжимаемся слишком */
+  min-width:320px;
 }
-th,td{padding:.5rem .4rem;font-size:.9rem;text-align:left;border-bottom:1px solid #eee}
-th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
-.del{cursor:pointer;padding:0 .25rem;font-size:1.1rem;transition:color .2s}
-.del:hover{color:#ff4d6d}
+th,td{padding:.4rem;font-size:.85rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.2);}
+th{background:linear-gradient(135deg,rgba(103,80,164,.8),rgba(154,123,198,.8));color:#fff;}
+tr{transition:background .25s,transform .2s;}
+tr:hover{background:rgba(255,255,255,.15);transform:scale(1.01);}
+td.status{font-size:1.2rem;padding:0 .2rem;}
 
-/* ========== ЦЕНТРАЛЬНАЯ СТАТИСТИКА ========== */
+/* ========== ЦЕНТРАЛЬНАЯ СТАТИСТИКА С ЯРКИМ ГРАДИЕНТОМ ========== */
 .stats-card{
   max-width:420px;
   margin:1.5rem auto;
-  background:#ffffffcc;
+  background:rgba(255,255,255,.25);
   border-radius:16px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.6);
+  box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 0 0 1px rgba(255,255,255,.4);
   padding:1rem;
   backdrop-filter:blur(10px);
 }
@@ -78,69 +108,25 @@ th{background:linear-gradient(135deg,#6750a4,#9a7bc6);color:#fff}
   gap:1rem;
   margin-bottom:1rem;
 }
-.stat{text-align:center}
+.stat{text-align:center;transition:transform .25s;}
+.stat:hover{transform:scale(1.05);}
 .num{font-size:2rem;font-weight:700;
   background:linear-gradient(135deg,#6750a4,#9a7bc6,#c9b6e4,#e6d7f4,#f3edf7);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+  text-shadow:0 0 4px rgba(0,0,0,.1);
 }
-.label{font-size:.8rem;color:#1d1b20;margin-top:.2rem}
-canvas{margin:0 auto;display:block}
+.label{font-size:.8rem;color:#fff;text-shadow:0 0 2px rgba(0,0,0,.2);}
+canvas{margin:0 auto;display:block;transition:transform .3s;}
+canvas:hover{transform:scale(1.03);}
 
 /* ========== АДАПТИВ ANDROID (WebView) ========== */
 @media (max-width: 600px) {
   h1{-webkit-text-fill-color:#fff!important;color:#fff!important;}
   button[type="submit"]{-webkit-appearance:none;appearance:none;width:48px;height:48px;border-radius:50%;}
-  input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:#fff;border:1px solid #ccc}
+  input,select{-webkit-appearance:none;appearance:none;border-radius:8px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.4);}
+  th,td{padding:.25rem .2rem;font-size:.7rem;}
+  td:nth-child(2){white-space:nowrap;}
+  td:nth-child(4){font-size:.6rem;}
+  td:nth-child(5){padding:0 .15rem;font-size:1rem;}
 }
-
-/* ===== Android-WebView: таблица влезает без съезда ===== */
-@media (max-width: 600px) {
-  /* убираем системный скролл всей страницы */
-  html,body{overflow-x:hidden}
-
-  /* обёртка – на всю ширину экрана, скролл внутри */
-  .table-wrapper{
-    width:100vw;                 /* на всю ширину телефона */
-    overflow-x:auto;             /* скролл только внутри */
-    -webkit-overflow-scrolling:touch; /* плавный скролл iOS/Android */
-  }
-  table{min-width:360px}         /* не сжимаемся меньше 360px */
-
-  /* мелкие ячейки – больше помещается */
-  th,td{padding:.4rem;font-size:.8rem}
-}
-/* ===== Android: компактная таблица ===== */
-/* ===== компактная таблица ===== */
-@media (max-width: 600px) {
-  th,td{padding:.25rem .2rem;font-size:.7rem}   /* ещё меньше */
-  td:nth-child(2){white-space:nowrap}          /* цена в одну строку */
-  td:nth-child(4){font-size:.6rem}             /* «До конца» поменьше */
-}
-  /* компактные ячейки – больше места */
-  th,td{padding:.3rem .25rem;font-size:.75rem}
-
-  /* убираем лишнее слово «₽» – оставляем только цифру */
-  td:nth-child(2){white-space:nowrap}
-
-  /* колонка «До конца» → просто цифра + иконка */
-  td:nth-child(4){font-size:.7rem}
-  td:nth-child(5){padding:0 .2rem;font-size:1rem} /* статус/корзина */
-
-  /* корзина поменьше */
-  .del{padding:0 .2rem;font-size:1rem}
-}
-
-/* ===== Android: компактная таблица ===== */
-@media (max-width: 600px) {
-  html,body{overflow-x:hidden}
-  .table-wrapper{width:100vw;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{min-width:300px}                      /* можно ещье уже */
-
-  th,td{padding:.25rem .2rem;font-size:.7rem}   /* ещё компактнее */
-  td:nth-child(2){white-space:nowrap}          /* цена в одну строку */
-  td:nth-child(4){font-size:.65rem}            /* «До конца» поменьше */
-  td:nth-child(5){padding:0 .15rem;font-size:1rem} /* иконка статуса */
-  .del{padding:0 .15rem;font-size:.9rem}       /* корзина поменьше */
-}
-
