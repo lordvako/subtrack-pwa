@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>SubTrack</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -25,6 +25,7 @@
     <button type="submit">+</button>
   </form>
 
+  <!-- таблица без горизонтального скролла -->
   <div class="table-wrapper">
     <table id="list">
       <thead>
@@ -34,12 +35,11 @@
     </table>
   </div>
 
-  <!-- строго 4 ячейки статистики -->
+  <!-- центральная карточка статистики (3 пункта) -->
   <section class="stats-card">
     <div class="stats-grid">
       <div class="stat"><div class="num" id="totalSub">0</div><div class="label">кол-во</div></div>
-
-      <div class="stat"><div class="num" id="totalYear">0</div><div class="label">₽ в год</div></div>
+      <div class="stat"><div class="num" id="monthCost">0</div><div class="label">₽ в месяц</div></div>
       <div class="stat"><div class="num" id="mostExpensive">-</div><div class="label">дороже всего</div></div>
     </div>
     <canvas id="chart" width="280" height="280"></canvas>
@@ -48,5 +48,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
-
