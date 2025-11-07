@@ -15,94 +15,96 @@ function addMonths(date, n){
   return d.toISOString().slice(0,10);
 }
 
+// === формат дд.мм.гг ==========
+function fmtDate(iso){
+  const d=new Date(iso);
+  const dd=String(d.getDate()).padStart(2,'0');
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  const yy=String(d.getFullYear()).slice(-2);
+  return `${dd}.${mm}.${yy}`;
+}
+
 // === рендер таблицы ===
 function render(){
-  const subs = getSubs()
-    .sort((a,b)=> new Date(a.nextPay) - new Date(b.nextPay));
-
-  const rows = subs
-    .map((s,idx)=>{
-      const next     = addMonths(s.nextPay,1);
-      const daysLeft = Math.ceil((new Date(next) - new Date()) / 86400000);
-      const status   = daysLeft < 0 ? '❌' : '✅';
-      return `<tr data-idx="${idx}" style="animation:fadeIn .4s">
-                <td>${s.name}</td>
-                <td>${s.price} ₽</td>
-                <td>${next}</td>
-                <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
-                <td class="status">${status}</td>
-              </tr>`;
-    }).join('');
-
-  const tbody = document.querySelector('#list tbody');
-  if(tbody) tbody.innerHTML = rows || '<tr><td colspan="5">Подписок пока нет</td></tr>';
-
+  const subs=getSubs().sort((a,b)=>new Date(a.nextPay)-new Date(b.nextPay));
+  const rows=subs.map((s,idx)=>{
+    const next     =addMonths(s.nextPay,1);
+    const daysLeft =Math.ceil((new Date(next)-new Date())/86400000);
+    const status   =daysLeft<0?'❌':'✅';
+    // обрезаем длинное название
+    const nameCut=s.name.length>12?s.name.slice(0,12)+'…':s.name;
+    return `<tr data-idx="${idx}" style="animation:fadeIn .4s">
+              <td>${nameCut}</td>
+              <td>${s.price} ₽</td>
+              <td>${fmtDate(next)}</td>
+              <td class="days">${daysLeft<0?'просрочено':`${daysLeft} дн.`}</td>
+              <td class="status">${status}</td>
+            </tr>`;
+  }).join('');
+  const tbody=document.querySelector('#list tbody');
+  if(tbody)tbody.innerHTML=rows||'<tr><td colspan="5">Подписок пока нет</td></tr>';
   updateStats();
   drawChart();
 }
 
 // ===== свайп-удаление =====
-let touchStartX = 0;
-let touchEndX   = 0;
-
-document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive:true});
-document.addEventListener('touchend',   e => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe(e.target);
-}, {passive:true});
-
+let touchStartX=0,touchEndX=0;
+document.addEventListener('touchstart',e=>touchStartX=e.changedTouches[0].screenX,{passive:true});
+document.addEventListener('touchend',e=>{
+  touchEndX=e.changedTouches[0].screenX;handleSwipe(e.target);
+},{passive:true});
 function handleSwipe(el){
-  const row = el.closest('tr');
-  if(!row) return;
-  const deltaX = touchStartX - touchEndX;
-  if(deltaX < 80) return;
-
-  const idx = row.dataset.idx;
-  if(idx === undefined) return;
-
-  row.style.transition = 'transform .3s';
-  row.style.transform  = 'translateX(-110%)';
-
-  setTimeout(() => {
-    const subs = getSubs();
-    subs.splice(idx, 1);
-    setSubs(subs);
-    render();
-  }, 300);
+  const row=el.closest('tr');if(!row)return;
+  const deltaX=touchStartX-touchEndX;if(deltaX<80)return;
+  const idx=row.dataset.idx;if(idx===undefined)return;
+  row.style.transition='transform .3s';row.style.transform='translateX(-110%)';
+  setTimeout(()=>{
+    const subs=getSubs();subs.splice(idx,1);setSubs(subs);render();
+  },300);
 }
 
-// === статистика (3 показателя) ==========
+// === статистика (3 пункта) + ₽ в МЕСЯЦ ==========
 function updateStats(){
-  const subs = getSubs();
-  const total    = subs.length;
-  const yearCost = total ? Math.round(subs.reduce((s,x)=>s+ (+x.price)*12,0)) : 0;
-  let mostExpName = '-';
-  if(total) mostExpName = subs.reduce((max,cur)=> (+cur.price) > (+max.price) ? cur : max).name;
+  const subs=getSubs();
+  const total=subs.length;
+  const monthCost=total?Math.round(subs.reduce((s,x)=>s+(+x.price),0)):0;
+  let mostExpName='-';
+  if(total)mostExpName=subs.reduce((max,cur)=>(+cur.price)>(+max.price)?cur:max).name;
 
-  /* строго по существующим id – не создаём новых элементов */
-  document.getElementById('totalSub').textContent   = total;
-  document.getElementById('totalYear').textContent  = yearCost;
-  document.getElementById('mostExpensive').textContent = mostExpName;
+  document.getElementById('totalSub').textContent=total;
+  document.getElementById('monthCost').textContent=monthCost;
+  document.getElementById('mostExpensive').textContent=mostExpName;
 }
 
-// === диаграмма (только если есть данные) ==========
+// === диаграмма с подписями цветов ==========
 function drawChart(){
-  const canvas = document.getElementById('chart');
-  if(!canvas) return;
-  const subs = getSubs();
+  const canvas=document.getElementById('chart');
+  if(!canvas)return;
+  const subs=getSubs();
   if(!subs.length){canvas.style.display='none';return;}
   canvas.style.display='block';
   const ctx=canvas.getContext('2d');
   if(window.myPie)window.myPie.destroy();
+
+  // подписи под диаграммой
+  const labels=subs.map(s=>s.name);
+  const data  =subs.map(s=>+s.price);
+  const colors=['#ff8c00','#ffa500','#ffb84d','#ffd27f','#ffedb3'];
+
   window.myPie=new Chart(ctx,{
     type:'pie',
     data:{
-      labels:subs.map(s=>s.name),
-      datasets:[{data:subs.map(s=>+s.price),
-                 backgroundColor:['#6750a4','#9a7bc6','#c9b6e4','#e6d7f4','#f3edf7'],
-                 borderWidth:0}]
+      labels:labels,
+      datasets:[{data:data,backgroundColor:colors,borderWidth:0}]
     },
-    options:{responsive:true,plugins:{legend:{display:false}},cutout:'60%'}
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#fff',font:{size:12},padding:10}},
+        tooltip:{enabled:true,backgroundColor:'rgba(0,0,0,.7)',titleColor:'#fff',bodyColor:'#fff'}
+      },
+      cutout:'60%'
+    }
   });
 }
 
